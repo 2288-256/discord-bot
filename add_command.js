@@ -26,7 +26,11 @@ const botinfo = {
   name: "botinfo",
   description: "[実装予定]Botの情報を表示します"
 };
-const commands = [leave, ping, omikuzi, slot, botinfo];
+const stop = {
+  name: "stop",
+  description: "Botを強制終了させます"  
+}
+const commands = [leave, ping, omikuzi, slot, botinfo, stop];
 const client = new Client({
 	intents: 0,
 });
