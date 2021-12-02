@@ -29,6 +29,7 @@ client.on("interactionCreate", async (interaction) => {
 		await interaction.editReply(
 			[...msg, `RTT: ${Date.now() - now}ms`].join("\n")
 		);
+		console.log(interaction.member.nickname + "がpingを使用しました")
 		return;
 	}
 	if (interaction.commandName === "leave") {
@@ -41,10 +42,11 @@ client.on("interactionCreate", async (interaction) => {
 			interaction.editReply("DMは対応していません");
 		} else {
 			if (!interaction.member.id !== "669735475270909972") {
-				return interaction.reply({
+				interaction.reply({
 					content: "あなたにはこのBotをKickする権限がありません",
 					ephemeral: true,
 				});
+				return console.log(interaction.member.nickname + "がleaveを使用しました")
 			} else {
 				await interaction.reply("サーバーからKickしました");
 				await interaction.guild.leave();
