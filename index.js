@@ -21,6 +21,14 @@ client.on("interactionCreate", async (interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
+			if (interaction.guild === null) {
+			const wait = require("util").promisify(setTimeout);
+			return interaction.reply(
+				"この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？"
+			);
+			await wait(5000);
+			interaction.editReply("DMは対応していません");
+		} else {
 	if (interaction.commandName === "ping") {
 		const now = Date.now();
 		const msg = [`GW: ${interaction.client.ws.ping}ms`];
@@ -33,14 +41,6 @@ client.on("interactionCreate", async (interaction) => {
 		return;
 	}
 	if (interaction.commandName === "leave") {
-		if (interaction.guild === null) {
-			const wait = require("util").promisify(setTimeout);
-			interaction.reply(
-				"この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？"
-			);
-			await wait(5000);
-			interaction.editReply("DMは対応していません");
-		} else {
 			if (!interaction.member.id !== "669735475270909972") {
 				interaction.reply({
 					content: "あなたにはこのBotをKickする権限がありません",
@@ -52,8 +52,8 @@ client.on("interactionCreate", async (interaction) => {
 				await interaction.guild.leave();
 			}
 		}
-	}
 		if (interaction.commandName === "stop") {
+		  
 			if (!interaction.member.id !== "669735475270909972") {
 				interaction.reply({
 					content: "あなたにはこのBotを停止するする権限がありません",
@@ -64,6 +64,7 @@ client.on("interactionCreate", async (interaction) => {
 				await interaction.reply("Botを停止しました");
 				await process.exit()
 			}
+		}
 		}
 });
 client.on("messageCreate", async (message) => {
