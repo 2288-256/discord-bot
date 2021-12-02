@@ -12,9 +12,9 @@ client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on("message", async (message) => {
+client.on("messageCreate", async (message) => {
 	if (message.guild === null) {
-		return;
+		return message.reply("DMは対応していません")
 	}
 });
 client.on("interactionCreate", async (interaction) => {
@@ -54,7 +54,7 @@ client.on("interactionCreate", async (interaction) => {
 		}
 	}
 });
-client.on("message", async (message) => {
+client.on("messageCreate", async (message) => {
 	if (
 		message.content.match(
 			/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
