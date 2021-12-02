@@ -9,7 +9,7 @@ const TOKEN = process.env.DISCORD_TOKEN;
 const usedCommandRecently = new Set();
 
 client.on("ready", () => {
-	console.log(`Logged in as ${client.user.tag}!`);
+	console.log(`Logged in as ${client.user.tag}!\nlocation:` + process.env.OS + `\n----------------------`);
 });
 
 client.on("messageCreate", async (message) => {
