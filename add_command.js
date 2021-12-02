@@ -22,10 +22,10 @@ const slot = {
 	name: "slot",
 	description: "実装予定(今は動きません)",
 };
-const bot-info = {
-  name: "bot-info"
+const botinfo = {
+  name: "bot-info",
   description: "Botの情報を表示します"
-}
+};
 const commands = [leave, ping, omikuzi, slot, bot-info];
 const client = new Client({
 	intents: 0,
