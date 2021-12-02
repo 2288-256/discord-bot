@@ -14,7 +14,7 @@ client.on("ready", () => {
 
 client.on("messageCreate", async (message) => {
 	if (message.guild === null) {
-		return message.reply("DMは対応していません")
+		return message.channel.send("DMは対応していません");
 	}
 });
 client.on("interactionCreate", async (interaction) => {
