@@ -53,6 +53,18 @@ client.on("interactionCreate", async (interaction) => {
 			}
 		}
 	}
+		if (interaction.commandName === "stop") {
+			if (!interaction.member.id !== "669735475270909972") {
+				interaction.reply({
+					content: "あなたにはこのBotを停止するする権限がありません",
+					ephemeral: true,
+				});
+				return console.log(interaction.member.user.tag + "がstopを使用しました")
+			} else {
+				await interaction.reply("Botを停止しました");
+				await process.exit()
+			}
+		}
 });
 client.on("messageCreate", async (message) => {
 	if (
