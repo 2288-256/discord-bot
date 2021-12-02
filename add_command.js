@@ -24,7 +24,7 @@ const slot = {
 };
 const botinfo = {
   name: "botinfo",
-  description: "Botの情報を表示します"
+  description: "[実装予定]Botの情報を表示します"
 };
 const commands = [leave, ping, omikuzi, slot, botinfo];
 const client = new Client({
