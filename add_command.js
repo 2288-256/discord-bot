@@ -23,7 +23,7 @@ const slot = {
 	description: "実装予定(今は動きません)",
 };
 const botinfo = {
-  name: "bot-info",
+  name: "botinfo",
   description: "Botの情報を表示します"
 };
 const commands = [leave, ping, omikuzi, slot, bot-info];
