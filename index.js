@@ -23,7 +23,7 @@ client.on("interactionCreate", async (interaction) => {
 	}
 			if (interaction.guild === null) {
 			const wait = require("util").promisify(setTimeout);
-			return interaction.reply(
+			interaction.reply(
 				"この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？"
 			);
 			await wait(5000);
