@@ -68,8 +68,7 @@ client.on("interactionCreate", async (interaction) => {
 			}
 		}
 		
-		}
-});
+		});
 client.on("messageCreate", async (message) => {
 	if (
 		message.content.match(
