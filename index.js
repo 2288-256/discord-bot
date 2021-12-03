@@ -65,6 +65,7 @@ client.on("interactionCreate", async (interaction) => {
 				await process.exit()
 			}
 		}
+		
 		}
 });
 client.on("messageCreate", async (message) => {
