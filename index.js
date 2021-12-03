@@ -22,14 +22,7 @@ client.on("interactionCreate", async (interaction) => {
 		return;
 	}
 			/*
-			if (interaction.guild === null) {
-			const wait = require("util").promisify(setTimeout);
-			interaction.reply(
-				"この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？"
-			);
-			await wait(5000);
-			interaction.editReply("DMは対応していません");
-		} else {
+			
 		*/
 	if (interaction.commandName === "ping") {
 		const now = Date.now();
@@ -43,6 +36,14 @@ client.on("interactionCreate", async (interaction) => {
 		return;
 	}
 	if (interaction.commandName === "leave") {
+	  if (interaction.guild === null) {
+			const wait = require("util").promisify(setTimeout);
+			interaction.reply(
+				"この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？"
+			);
+			await wait(5000);
+			interaction.editReply("DMは対応していません");
+		} else {
 			if (!interaction.member.id !== "669735475270909972") {
 				interaction.reply({
 					content: "あなたにはこのBotをKickする権限がありません",
@@ -54,6 +55,7 @@ client.on("interactionCreate", async (interaction) => {
 				await interaction.guild.leave();
 			}
 		}
+	}
 		if (interaction.commandName === "stop") {
 		  
 			if (!interaction.member.id !== "669735475270909972") {
@@ -61,7 +63,7 @@ client.on("interactionCreate", async (interaction) => {
 					content: "あなたにはこのBotを停止するする権限がありません",
 					ephemeral: true,
 				});
-				return console.log(interaction.member.user.tag + "がstopを使用しました")
+				return console.log(interaction.user.tag + "がstopを使用しました")
 			} else {
 				await interaction.reply("Botを停止しました");
 				await process.exit()
