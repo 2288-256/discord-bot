@@ -21,6 +21,7 @@ client.on("interactionCreate", async (interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
+			/*
 			if (interaction.guild === null) {
 			const wait = require("util").promisify(setTimeout);
 			interaction.reply(
@@ -29,6 +30,7 @@ client.on("interactionCreate", async (interaction) => {
 			await wait(5000);
 			interaction.editReply("DMは対応していません");
 		} else {
+		*/
 	if (interaction.commandName === "ping") {
 		const now = Date.now();
 		const msg = [`GW: ${interaction.client.ws.ping}ms`];
@@ -37,7 +39,7 @@ client.on("interactionCreate", async (interaction) => {
 		await interaction.editReply(
 			[...msg, `RTT: ${Date.now() - now}ms`].join("\n")
 		);
-		console.log(interaction.member.user.tag + "がpingを使用しました")
+		console.log(interaction.user.tag + "がpingを使用しました")
 		return;
 	}
 	if (interaction.commandName === "leave") {
