@@ -54,9 +54,10 @@ client.on("interactionCreate", async (interaction) => {
     const wait = require("util").promisify(setTimeout);
     await interaction.reply({ content: msg.join("\n"), ephemeral: true });
     await interaction.editReply(
-      [...msg, `RTT: ${Date.now() - now}ms`].join(
-        "\n\n応答あり...<:yosi:916695133863411712>"
-      )
+      [
+        ...msg,
+        `RTT: ${Date.now() - now}ms\n\n反応あり...<:yosi:916695133863411712>`,
+      ].join("\n")
     );
     console.log(interaction.user.tag + "がpingを使用しました");
     return;
