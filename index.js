@@ -89,6 +89,7 @@ client.on("messageCreate", async (message) => {
     )
   ) {
     if (usedCommandRecently.has(message.guild.id)) {
+      console.log("クールダウン時間中");
     } else {
       usedCommandRecently.add(message.guild.id);
       setTimeout(() => {
