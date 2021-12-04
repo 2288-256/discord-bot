@@ -72,7 +72,7 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
   if (interaction.commandName === "test") {
-    const button = new MessageActionRow().addComponents(
+    const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomID("test")
         .setLabal("テスト")
