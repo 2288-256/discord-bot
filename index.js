@@ -79,7 +79,7 @@ client.on("interactionCreate", async (interaction) => {
         .setLabel("テスト")
         .setStyle("SUCCESS")
     );
-    await interaction.reply({ comment: "test", Components: [row] });
+    await interaction.reply({ comment: "test", components: [row] });
   }
 });
 client.on("messageCreate", async (message) => {
