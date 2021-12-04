@@ -127,15 +127,8 @@ client.on("messageCreate", async (message) => {
         )
         .setTimestamp() //引数にはDateオブジェクトを入れることができる。何も入れないと今の時間になる
         .setFooter("このメッセージは2分後に削除されます");
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setCustomId("message-delete")
-          .setLabel("誤動作の場合は押してください")
-          .setStyle("DANGER")
-      );
       const reply = await message.channel.send({
         embeds: [embed],
-        components: [row],
       });
       await wait(180000);
       await reply.delete();
