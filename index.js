@@ -21,6 +21,63 @@ client.on("messageCreate", async (message) => {
   if (message.guild === null) {
     return;
   }
+  if (
+    message.content === "てすと" //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
+  ) {
+    if (usedCommandRecently.has(message.guild.id)) {
+      console.log("クールダウン時間中");
+    } else {
+      usedCommandRecently.add(message.guild.id);
+      setTimeout(() => {
+        usedCommandRecently.delete(message.guild.id);
+      }, 3600000);
+      const wait = require("util").promisify(setTimeout);
+      const embed = new Discord.MessageEmbed()
+        .setColor("RANDOM")
+        .setTitle("サーバーに参加できない方向け")
+        .setDescription("確認事項一覧")
+        .setFields(
+          {
+            name: "ステップ1",
+            value:
+              "<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)",
+          },
+          {
+            name: "ステップ2",
+            value: "サーバーアドレスやポートがあっているか？",
+          },
+          {
+            name: "解決したら",
+            value:
+              "質問のメッセージを消してください\n解決したかどうかはわかりません",
+          },
+          {
+            name: "解決しなかったら",
+            value:
+              "先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません",
+          },
+          { name: "その他", value: "以下の画像の場合は対応をお待ちください" }
+        )
+        .setImage(
+          "https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png"
+        )
+        .setTimestamp() //引数にはDateオブジェクトを入れることができる。何も入れないと今の時間になる
+        .setFooter("このメッセージは2分後に削除されます");
+      const row = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setCustomId("message-delete")
+          .setLabel("誤動作の場合は押してください")
+          .setStyle("DANGER")
+      );
+      const reply = await message.channel.send({
+        content: "[自動メッセージ]",
+        embeds: [embed],
+        //components: [row],
+      });
+      await wait(180000);
+      await reply.delete();
+    }
+  }
 });
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) {
@@ -80,65 +137,6 @@ client.on("interactionCreate", async (interaction) => {
         .setStyle("SUCCESS")
     );
     await interaction.reply({ content: "test", components: [row] });
-  }
-});
-client.on("messageCreate", async (message) => {
-  if (
-    message.content === "てすと" //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
-  ) {
-    if (usedCommandRecently.has(message.guild.id)) {
-      console.log("クールダウン時間中");
-    } else {
-      usedCommandRecently.add(message.guild.id);
-      setTimeout(() => {
-        usedCommandRecently.delete(message.guild.id);
-      }, 3600000);
-      const wait = require("util").promisify(setTimeout);
-      const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
-        .setTitle("サーバーに参加できない方向け")
-        .setDescription("確認事項一覧")
-        .setFields(
-          {
-            name: "ステップ1",
-            value:
-              "<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)",
-          },
-          {
-            name: "ステップ2",
-            value: "サーバーアドレスやポートがあっているか？",
-          },
-          {
-            name: "解決したら",
-            value:
-              "質問のメッセージを消してください\n解決したかどうかはわかりません",
-          },
-          {
-            name: "解決しなかったら",
-            value:
-              "先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません",
-          },
-          { name: "その他", value: "以下の画像の場合は対応をお待ちください" }
-        )
-        .setImage(
-          "https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png"
-        )
-        .setTimestamp() //引数にはDateオブジェクトを入れることができる。何も入れないと今の時間になる
-        .setFooter("このメッセージは2分後に削除されます");
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setCustomId("message-delete")
-          .setLabel("誤動作の場合は押してください")
-          .setStyle("DANGER")
-      );
-      const reply = await message.channel.send({
-        content: "[自動メッセージ]",
-        embeds: [embed],
-        //components: [row],
-      });
-      await wait(180000);
-      await reply.delete();
-    }
   }
 });
 /*
