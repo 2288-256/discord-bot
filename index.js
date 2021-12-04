@@ -66,6 +66,16 @@ client.on("interactionCreate", async (interaction) => {
 				await process.exit()
 			}
 		}
+		if (interaction.commandName === "test"){
+			const button = new Discord.MessageButton()
+					.setStyle('green')
+					.setLabal('テスト')
+					.setCustomID('test')
+			interaction.reply({
+				comment: "テスト",
+				componests: [new Discord.MessageActionRow().addComponents(button)]
+			})
+		}
 		
 		
 		});
