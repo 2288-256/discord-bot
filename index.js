@@ -73,9 +73,9 @@ client.on("interactionCreate", async (interaction) => {
   }
   if (interaction.commandName === "test") {
     const button = new Discord.MessageButton()
-      .setStyle("success")
+      .setCustomID("test")
       .setLabal("テスト")
-      .setCustomID("test");
+      .setStyle("SUCCESS");
     interaction.reply({
       comment: "テスト",
       componests: [new Discord.MessageActionRow().addComponents(button)],
