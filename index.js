@@ -75,7 +75,7 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.commandName === "test") {
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomID("test")
+        .setCustomId("test")
         .setLabal("テスト")
         .setStyle("SUCCESS")
     );
