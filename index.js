@@ -75,9 +75,10 @@ client.on("messageCreate", async (message) => {
 					.setStyle("DANGER")
 			);
 			*/
-      const sent = await message.channel.send({
+      const sent = await message.channel.reply({
         content: "[これは自動送信メッセージです]",
         embeds: [embed],
+        ephemeral: true,
       });
       const reaction = await sent.react("❌");
       const filter = (reaction, user) =>
