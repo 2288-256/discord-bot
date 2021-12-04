@@ -136,6 +136,19 @@ client.on("interactionCreate", async (interaction) => {
 			await process.exit();
 		}
 	}
+	if (interaction.commandName === "test") {
+		const row = new MessageActionRow().addComponents(
+			new MessageButton()
+				.setCustomId("test")
+				.setLabel("テスト")
+				.setStyle("SUCCESS")
+		);
+		await interaction.reply({
+			content: "test",
+			components: [row],
+			ephemeral: true,
+		});
+	}
 	/*
 		if (interaction.commandName === "botinfo") {
 			const embed1 = new Discord.MessageEmbed();
@@ -170,5 +183,13 @@ client.on("interactionCreate", async (interaction) => {
 				);
 			return interaction.reply({ embeds: [embed1], ephemeral: true });
 		}*/
+});
+client.on("interactionCreate", async (interaction) => {
+	if (interaction.customId === "test") {
+		await interaction.reply({
+			content: "ボタンが押されました。",
+			ephemeral: true,
+		});
+	}
 });
 client.login(TOKEN);
