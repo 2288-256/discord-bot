@@ -85,7 +85,8 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
   if (
     message.content.match(
-      /入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
+      "てすと"
+      //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
     )
   ) {
     if (usedCommandRecently.has(message.guild.id)) {
