@@ -76,7 +76,7 @@ client.on("interactionCreate", async (interaction) => {
     const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("test")
-        .setLabal("テスト")
+        .setLabel("テスト")
         .setStyle("SUCCESS")
     );
     await interaction.reply({ comment: "test", Components: [row] });
