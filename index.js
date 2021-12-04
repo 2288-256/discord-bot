@@ -8,6 +8,7 @@ require("dotenv").config();
 const TOKEN = process.env.DISCORD_TOKEN;
 
 const usedCommandRecently = new Set();
+const userid = new Set();
 
 client.on("ready", () => {
   console.log(
@@ -29,6 +30,7 @@ client.on("messageCreate", async (message) => {
     if (usedCommandRecently.has(message.guild.id)) {
       console.log("クールダウン時間中");
     } else {
+      userid.add(message.user.id);
       usedCommandRecently.add(message.guild.id);
       setTimeout(() => {
         usedCommandRecently.delete(message.guild.id);
@@ -145,12 +147,17 @@ client.on("interactionCreate", async (interaction) => {
     await interaction.reply({ content: "test", components: [row] });
   }
 });
-/*
 const filter = (i) =>
   i.customId === "primary" && i.user.id === "122157285790187530";
 const collector = interaction.channel.createMessageComponentCollector({
   filter,
   time: 15000,
 });
-*/
+collector.on("collect", async (i) => {
+  if (i.customId === "message-delete") {
+    if (i.user.id === userid) {
+      await i.deleteReply();
+    }
+  }
+});
 client.login(TOKEN);
