@@ -35,7 +35,7 @@ client.on("messageCreate", async (message) => {
         .setStyle("DANGER")
     );
     const sent = await message.channel.send({
-      content: "Q&A",
+      content: "[<@" + message.user.id + "さんが質問されました]\n\n" + "Q&A",
       components: [row],
     });
   }
