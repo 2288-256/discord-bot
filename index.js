@@ -73,10 +73,9 @@ client.on("messageCreate", async (message) => {
           .setLabel("サーバーに参加できない")
           .setStyle("DANGER")
       );
-      const sent = await message.channel.reply({
+      const sent = await message.channel.send({
         content: "Q&A",
         components: [row],
-        ephemeral: true,
       });
       const reaction = await sent.react("❌");
       const filter = (reaction, user) =>
