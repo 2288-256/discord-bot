@@ -98,7 +98,6 @@ client.on("messageCreate", async (message) => {
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setTitle("サーバーに参加できない方向け")
-        .setAuthor("[自動メッセージ]")
         .setDescription("確認事項一覧")
         .setFields(
           {
@@ -134,6 +133,7 @@ client.on("messageCreate", async (message) => {
           .setStyle("DANGER")
       );
       const reply = await message.channel.send({
+        content: "[自動メッセージ]",
         embeds: [embed],
         components: [row],
       });
