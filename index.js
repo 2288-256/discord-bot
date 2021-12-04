@@ -131,7 +131,9 @@ client.on("interactionCreate", async (interaction) => {
         content: "あなたにはこのBotを停止するする権限がありません",
         ephemeral: true,
       });
-      return console.log(interaction.user.tag + "がstopを使用しました");
+      return console.log(
+        interaction.user.tag + "がstopを使用しましたが失敗しました"
+      );
     } else {
       await interaction.reply("Botを停止しました");
       await process.exit();
