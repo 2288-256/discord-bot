@@ -150,7 +150,7 @@ client.on("interactionCreate", async (interaction) => {
 client.on("interactionCreate", async (interaction) => {
   if (interaction.customId === "message-delete") {
     //if (interaction.user.id === userid) {
-    await i.deleteReply();
+    await interaction.deleteReply();
     //}
   }
 });
