@@ -40,6 +40,9 @@ client.on("messageCreate", async (message) => {
       components: [row],
     });
   }
+  if (message.content.match(/ヨシ|よし/)) {
+    message.channel.send("<:yosi:916695133863411712>");
+  }
 });
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) {
