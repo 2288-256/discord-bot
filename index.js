@@ -252,7 +252,6 @@ client.on("interactionCreate", async (interaction) => {
           random -= weight[i];
         }
       }
-      console.log("lottery error");
     }
   }
 });
