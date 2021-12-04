@@ -9,6 +9,7 @@ var packagejson = require("./package.json");
 const TOKEN = process.env.DISCORD_TOKEN;
 
 const usedCommandRecently = new Set();
+const usedCommandRecently1 = new Set();
 
 client.on("ready", () => {
   console.log(
@@ -217,36 +218,48 @@ client.on("interactionCreate", async (interaction) => {
     console.log("処理後");
   }
   if (interaction.commandName === "omikuzi") {
-    if (interaction.user.id !== "669735475270909972") {
+    if (usedCommandRecently1.has(message.guild.id)) {
+      console.log("クールダウン時間中");
       interaction.reply({
-        content: "あなたにはこのコマンドを実行する権限がありません",
+        content: "おみくじは一日一回しか引けません",
         ephemeral: true,
       });
     } else {
-      let omikuzi = [
-        "大吉",
-        "中吉",
-        "小吉",
-        "凶",
-        "大大吉",
-        "中小吉",
-        "小中吉",
-      ];
-      let weight = [200, 500, 800, 1, 10, 700, 600];
-      let totalWeight = 0;
-      for (var i = 0; i < weight.length; i++) {
-        totalWeight += weight[i];
-      }
-      let random = Math.floor(Math.random() * totalWeight);
-      for (var i = 0; i < weight.length; i++) {
-        if (random < weight[i]) {
-          interaction.reply(omikuzi[i]);
-          return;
-        } else {
-          random -= weight[i];
+      usedCommandRecently1.add(message.guild.id);
+      setTimeout(() => {
+        usedCommandRecently1.delete(message.guild.id);
+      }, 86400000);
+      if (interaction.user.id !== "669735475270909972") {
+        interaction.reply({
+          content: "あなたにはこのコマンドを実行する権限がありません",
+          ephemeral: true,
+        });
+      } else {
+        let omikuzi = [
+          "大吉",
+          "中吉",
+          "小吉",
+          "凶",
+          "大大吉",
+          "中小吉",
+          "小中吉",
+        ];
+        let weight = [200, 500, 800, 1, 10, 700, 600];
+        let totalWeight = 0;
+        for (var i = 0; i < weight.length; i++) {
+          totalWeight += weight[i];
         }
+        let random = Math.floor(Math.random() * totalWeight);
+        for (var i = 0; i < weight.length; i++) {
+          if (random < weight[i]) {
+            interaction.reply(omikuzi[i]);
+            return;
+          } else {
+            random -= weight[i];
+          }
+        }
+        console.log("lottery error");
       }
-      console.log("lottery error");
     }
   }
 });
