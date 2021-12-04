@@ -149,10 +149,12 @@ client.on("interactionCreate", async (interaction) => {
 });
 const filter = (i) =>
   i.customId === "primary" && i.user.id === "122157285790187530";
-const collector = interaction.channel.createMessageComponentCollector({
+/*
+  const collector = interaction.channel.createMessageComponentCollector({
   filter,
   time: 15000,
 });
+*/
 collector.on("collect", async (i) => {
   if (i.customId === "message-delete") {
     if (i.user.id === userid) {
