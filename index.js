@@ -5,6 +5,7 @@ const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 require("dotenv").config();
+var packagejson = require("./package.json");
 const TOKEN = process.env.DISCORD_TOKEN;
 
 const usedCommandRecently = new Set();
@@ -149,40 +150,67 @@ client.on("interactionCreate", async (interaction) => {
 			ephemeral: true,
 		});
 	}
-	/*
-		if (interaction.commandName === "botinfo") {
-			const embed1 = new Discord.MessageEmbed();
-			const packagelist = JSON.stringify(Object.keys(packagejson.dependencies))
-				.setColor("RANDOM")
-				.setTitle("Botの詳細")
-				.setFields(
-					{
-						name: "Botの名前",
-						value: client.user.tag,
-						inline: true,
-					},
-					{
-						name: "起動OS",
-						value: process.env.OS,
-						inline: true,
-					},
-					{
-						name: "Node.js バージョン",
-						value: process.env.node_version,
-						inline: true,
-					},
-					{
-						name: "Discord.js バージョン",
-						value: packagejson.dependencies["discord.js"],
-						inline: true,
-					},
-					{
-						name: "使用しているパッケージ",
-						value: packagelist,
-					}
-				);
-			return interaction.reply({ embeds: [embed1], ephemeral: true });
-		}*/
+	if (interaction.commandName === "botinfo") {
+		const guildsize = client.guilds.cache.size;
+		const time = client.uptime;
+		const sec = Math.floor(time / 1000) % 60;
+		const min = Math.floor(time / 1000 / 60) % 60;
+		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
+		const days = Math.floor(time / 1000 / 60 / 60 / 24);
+		var d = new Date(client.readyTimestamp);
+		const embed1 = new Discord.MessageEmbed()
+			.setColor("RANDOM")
+			.setTitle("Botの詳細")
+			.setFields(
+				{
+					name: "Botの名前",
+					value: client.user.tag,
+					inline: true,
+				},
+				{
+					name: "起動OS",
+					value: process.env.OS,
+					inline: true,
+				},
+				{
+					name: "Node.js バージョン",
+					value: process.env.node_version,
+					inline: true,
+				},
+				{
+					name: "Discord.js バージョン",
+					value: packagejson.dependencies["discord.js"],
+					inline: true,
+				},
+				{
+					name: "認識しているサーバー数",
+					value: "`" + client.guilds.cache.size + "サーバー`",
+					inline: true,
+				},
+				{
+					name: "認識しているメンバー数",
+					value:
+						"`" +
+						client.guilds.cache
+							.map((guild) => guild.memberCount)
+							.reduce((p, c) => p + c) +
+						"人`",
+					inline: true,
+				},
+				{
+					name: "起動時間",
+					value: days + "日" + hours + "時間" + min + "分" + sec + "秒",
+					inline: true,
+				},
+				{
+					name: "最終起動時刻",
+					value: "`" + d.toLocaleString() + "`",
+					inline: true,
+				}
+			);
+		interaction.reply({ embeds: [embed1], ephemeral: true });
+		return console.log(interaction.user.tag + "がbotinfoを使用しました");
+	}
 });
 client.on("interactionCreate", async (interaction) => {
 	if (interaction.customId === "test") {
