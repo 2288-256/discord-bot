@@ -208,8 +208,10 @@ client.on("interactionCreate", async (interaction) => {
           inline: true,
         }
       );
+    console.log("処理前");
     interaction.reply({ embeds: [embed1], ephemeral: true });
-    return console.log(interaction.user.tag + "がbotinfoを使用しました");
+    console.log(interaction.user.tag + "がbotinfoを使用しました");
+    console.log("処理後");
   }
 });
 client.on("interactionCreate", async (interaction) => {
