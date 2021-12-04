@@ -73,7 +73,7 @@ client.on("interactionCreate", async (interaction) => {
   }
   if (interaction.commandName === "test") {
     const button = new Discord.MessageButton()
-      .setStyle("green")
+      .setStyle("success")
       .setLabal("テスト")
       .setCustomID("test");
     interaction.reply({
