@@ -67,17 +67,15 @@ client.on("messageCreate", async (message) => {
         )
         .setTimestamp()
         .setFooter("誤動作の場合はリアクションを押してください");
-      /* ボタンでメッセージを削除しようとしていた時の残骸
-				const row = new MessageActionRow().addComponents(
-				new MessageButton()
-					.setCustomId("message-delete")
-					.setLabel("誤動作の場合は押してください")
-					.setStyle("DANGER")
-			);
-			*/
+      const row = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setCustomId("no-join-message-send")
+          .setLabel("サーバーに参加できない")
+          .setStyle("DANGER")
+      );
       const sent = await message.channel.reply({
-        content: "[これは自動送信メッセージです]",
-        embeds: [embed],
+        content: "Q&A",
+        components: [row],
         ephemeral: true,
       });
       const reaction = await sent.react("❌");
