@@ -44,7 +44,7 @@ client.on("interactionCreate", async (interaction) => {
 			await wait(5000);
 			interaction.editReply("DMは対応していません");
 		} else {
-			if (!interaction.member.id !== "669735475270909972") {
+			if (interaction.member.id !== "669735475270909972") {
 				interaction.reply({
 					content: "あなたにはこのBotをKickする権限がありません",
 					ephemeral: true,
@@ -58,7 +58,7 @@ client.on("interactionCreate", async (interaction) => {
 	}
 		if (interaction.commandName === "stop") {
 		  
-			if (!interaction.member.id !== "669735475270909972") {
+			if (interaction.member.id !== "669735475270909972") {
 				interaction.reply({
 					content: "あなたにはこのBotを停止するする権限がありません",
 					ephemeral: true,
@@ -69,6 +69,7 @@ client.on("interactionCreate", async (interaction) => {
 				await process.exit()
 			}
 		}
+		
 		
 		});
 client.on("messageCreate", async (message) => {
