@@ -24,7 +24,7 @@ const slot = {
 };
 const botinfo = {
   name: "botinfo",
-  description: "[実装予定]Botの情報を表示します",
+  description: "Botの情報を表示します",
 };
 const stop = {
   name: "stop",
