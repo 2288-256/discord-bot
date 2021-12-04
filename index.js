@@ -257,7 +257,7 @@ client.on("interactionCreate", async (interaction) => {
         {
           name: "その他",
           value:
-            "以下の画像の場合は<@669735475270909972>にDMを送って対応をお待ちください",
+            "以下の様な画像の場合は<@669735475270909972>にDMを送って対応をお待ちください",
         }
       )
       .setImage(
