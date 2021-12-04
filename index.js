@@ -36,7 +36,7 @@ client.on("messageCreate", async (message) => {
     );
     const sent = await message.channel.send({
       content:
-        "<@" + message.member.user.id + ">さんが質問されました]\n\n" + "Q&A",
+        "[<@" + message.member.user.id + ">さんが質問されました]\n\n" + "Q&A",
       components: [row],
     });
   }
