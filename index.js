@@ -28,62 +28,16 @@ client.on("messageCreate", async (message) => {
       /入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
     )
   ) {
-    if (usedCommandRecently.has(message.guild.id)) {
-      console.log("クールダウン時間中");
-    } else {
-      usedCommandRecently.add(message.guild.id);
-      setTimeout(() => {
-        usedCommandRecently.delete(message.guild.id);
-      }, 3600000);
-      const wait = require("util").promisify(setTimeout);
-      const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
-        .setTitle("サーバーに参加できない方向け")
-        .setDescription("確認事項一覧")
-        .setFields(
-          {
-            name: "ステップ1",
-            value:
-              "<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)",
-          },
-          {
-            name: "ステップ2",
-            value: "サーバーアドレスやポートがあっているか？",
-          },
-          {
-            name: "解決したら",
-            value:
-              "質問のメッセージを消してください\n解決したかどうかはわかりません",
-          },
-          {
-            name: "解決しなかったら",
-            value:
-              "先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません",
-          },
-          { name: "その他", value: "以下の画像の場合は対応をお待ちください" }
-        )
-        .setImage(
-          "https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png"
-        )
-        .setTimestamp()
-        .setFooter("誤動作の場合はリアクションを押してください");
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setCustomId("no-join-message-send")
-          .setLabel("サーバーに参加できない")
-          .setStyle("DANGER")
-      );
-      const sent = await message.channel.send({
-        content: "Q&A",
-        components: [row],
-      });
-      const reaction = await sent.react("❌");
-      const filter = (reaction, user) =>
-        reaction.emoji.name === "❌" && !user.bot;
-      sent
-        .awaitReactions({ filter, max: 1, time: 5000, errors: ["time"] })
-        .catch(() => sent.delete());
-    }
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("no-join-message-send")
+        .setLabel("サーバーに参加できない場合")
+        .setStyle("DANGER")
+    );
+    const sent = await message.channel.send({
+      content: "Q&A",
+      components: [row],
+    });
   }
 });
 client.on("interactionCreate", async (interaction) => {
@@ -262,6 +216,48 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.customId === "test") {
     await interaction.reply({
       content: "ボタンが押されました。",
+      ephemeral: true,
+    });
+  }
+  if (interaction.customId === "no-join-message-send") {
+    const embed = new Discord.MessageEmbed()
+      .setColor("RANDOM")
+      .setTitle("サーバーに参加できない方向け")
+      .setDescription("確認事項一覧")
+      .setFields(
+        {
+          name: "ステップ1",
+          value:
+            "<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)",
+        },
+        {
+          name: "ステップ2",
+          value: "サーバーアドレスやポートがあっているか？",
+        },
+        {
+          name: "解決したら",
+          value:
+            "質問のメッセージを消してください\n解決したかどうかはわかりません",
+        },
+        {
+          name: "解決しなかったら",
+          value:
+            "先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません",
+        },
+        {
+          name: "その他",
+          value:
+            "以下の画像の場合は<@669735475270909972>にDMを送って対応をお待ちください",
+        }
+      )
+      .setImage(
+        "https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png"
+      )
+      .setTimestamp()
+      .setFooter("このメッセージはあなただけに表示されています");
+    await interaction.reply({
+      const: "Q&A",
+      embeds: [embed],
       ephemeral: true,
     });
   }
