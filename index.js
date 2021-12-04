@@ -84,10 +84,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 client.on("messageCreate", async (message) => {
   if (
-    message.content.match(
-      "てすと"
-      //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
-    )
+    message.content === "てすと" //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
   ) {
     if (usedCommandRecently.has(message.guild.id)) {
       console.log("クールダウン時間中");
