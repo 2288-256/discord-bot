@@ -22,7 +22,9 @@ client.on("messageCreate", async (message) => {
     return;
   }
   if (
-    message.content === "てすと" //入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
+    message.content.match(
+      /入れな|はいれな|参加できな|さんかできな|入れん|はいれん/
+    )
   ) {
     if (usedCommandRecently.has(message.guild.id)) {
       console.log("クールダウン時間中");
@@ -70,12 +72,16 @@ client.on("messageCreate", async (message) => {
           .setStyle("DANGER")
       );
       const reply = await message.channel.send({
-        content: "[自動メッセージ]",
+        content: "[これは自動送信メッセージです]",
         embeds: [embed],
-        //components: [row],
+        components: [row],
       });
       await wait(180000);
-      await reply.delete();
+      if (reply === null) {
+        return;
+      } else {
+        await reply.delete();
+      }
     }
   }
 });
