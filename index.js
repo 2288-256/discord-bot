@@ -76,10 +76,6 @@ client.on("messageCreate", async (message) => {
 		)
 	) {
 		if (usedCommandRecently.has(message.guild.id)) {
-			const wait = require("util").promisify(setTimeout);
-			const send = await message.reply("クールダウンのテストです");
-			await wait(5000);
-			await send.delete;
 		} else {
 			usedCommandRecently.add(message.guild.id);
 			setTimeout(() => {
