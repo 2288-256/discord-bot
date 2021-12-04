@@ -29,8 +29,12 @@ const botinfo = {
 const stop = {
   name: "stop",
   description: "Botを強制終了させます"  
-}
-const commands = [leave, ping, omikuzi, slot, botinfo, stop];
+};
+const test = {
+name: "test",
+description: "テストコマンド"
+} 
+const commands = [leave, ping, omikuzi, slot, botinfo, stop, test];
 const client = new Client({
 	intents: 0,
 });
