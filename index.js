@@ -176,6 +176,11 @@ client.on("interactionCreate", async (interaction) => {
           inline: true,
         },
         {
+          name: "Botバージョン",
+          value: "`" + packagejson[version] + "`",
+          inline: true,
+        },
+        {
           name: "Node.js バージョン",
           value: "`" + process.env.node_version + "`",
           inline: true,
