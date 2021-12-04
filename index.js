@@ -135,8 +135,10 @@ client.on("messageCreate", async (message) => {
       );
       const reply = await message.channel.send({
         content: "[自動メッセージ]",
+        /*
         embeds: [embed],
         components: [row],
+        */
       });
       await wait(180000);
       await reply.delete();
