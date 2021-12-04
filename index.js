@@ -177,7 +177,7 @@ client.on("interactionCreate", async (interaction) => {
         },
         {
           name: "Botバージョン",
-          value: "`" + packagejson[version] + "`",
+          value: "`" + packagejson.version + "`",
           inline: true,
         },
         {
