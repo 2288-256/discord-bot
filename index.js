@@ -8,7 +8,6 @@ require("dotenv").config();
 const TOKEN = process.env.DISCORD_TOKEN;
 
 const usedCommandRecently = new Set();
-const userid = new Set();
 
 client.on("ready", () => {
 	console.log(
@@ -30,7 +29,6 @@ client.on("messageCreate", async (message) => {
 		if (usedCommandRecently.has(message.guild.id)) {
 			console.log("クールダウン時間中");
 		} else {
-			userid.add(message.user.id);
 			usedCommandRecently.add(message.guild.id);
 			setTimeout(() => {
 				usedCommandRecently.delete(message.guild.id);
@@ -65,25 +63,26 @@ client.on("messageCreate", async (message) => {
 				.setImage(
 					"https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png"
 				)
-				.setTimestamp() //引数にはDateオブジェクトを入れることができる。何も入れないと今の時間になる
-				.setFooter("このメッセージは2分後に削除されます");
-			const row = new MessageActionRow().addComponents(
+				.setTimestamp()
+				.setFooter("誤動作の場合はリアクションを押してください");
+			/* ボタンでメッセージを削除しようとしていた時の残骸
+				const row = new MessageActionRow().addComponents(
 				new MessageButton()
 					.setCustomId("message-delete")
 					.setLabel("誤動作の場合は押してください")
 					.setStyle("DANGER")
 			);
-			const reply = await message.channel.send({
+			*/
+			const sent = await message.channel.send({
 				content: "[これは自動送信メッセージです]",
 				embeds: [embed],
-				components: [row],
 			});
-			await wait(180000);
-			if (reply === null) {
-				return;
-			} else {
-				await reply.delete();
-			}
+			const reaction = await sent.react("❌");
+			const filter = (reaction, user) =>
+				reaction.emoji.name === "❌" && !user.bot;
+			sent
+				.awaitReactions({ filter, max: 1, time: 5000, errors: ["time"] })
+				.catch(() => sent.delete());
 		}
 	}
 });
@@ -137,15 +136,6 @@ client.on("interactionCreate", async (interaction) => {
 			await process.exit();
 		}
 	}
-	if (interaction.commandName === "test") {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId("test")
-				.setLabel("テスト")
-				.setStyle("SUCCESS")
-		);
-		await interaction.reply({ content: "test", components: [row] });
-	}
 	/*
 		if (interaction.commandName === "botinfo") {
 			const embed1 = new Discord.MessageEmbed();
@@ -180,12 +170,5 @@ client.on("interactionCreate", async (interaction) => {
 				);
 			return interaction.reply({ embeds: [embed1], ephemeral: true });
 		}*/
-});
-client.on("interactionCreate", async (interaction) => {
-	if (interaction.customId === "message-delete") {
-		//if (interaction.user.id === userid) {
-		await interaction.deleteReply();
-		//}
-	}
 });
 client.login(TOKEN);
