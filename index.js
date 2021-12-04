@@ -21,9 +21,6 @@ client.on("interactionCreate", async (interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
-			/*
-			
-		*/
 	if (interaction.commandName === "ping") {
 		const now = Date.now();
 		const msg = [`GW: ${interaction.client.ws.ping}ms`];
