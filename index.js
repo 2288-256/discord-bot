@@ -78,10 +78,7 @@ client.on("interactionCreate", async (interaction) => {
         .setLabal("テスト")
         .setStyle("SUCCESS")
     );
-    interaction.reply({
-      comment: "テスト",
-      componests: [new Discord.MessageActionRow().addComponents(button)],
-    });
+    await interaction.reply({ comment: "test", Components: [row] });
   }
 });
 client.on("messageCreate", async (message) => {
