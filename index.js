@@ -127,10 +127,27 @@ client.on("messageCreate", async (message) => {
         )
         .setTimestamp() //引数にはDateオブジェクトを入れることができる。何も入れないと今の時間になる
         .setFooter("このメッセージは2分後に削除されます");
-      const reply = await message.channel.send({ embeds: [embed] });
+      const row = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setCustomId("message-delete")
+          .setLabel("誤動作の場合は押してください")
+          .setStyle("DANGER")
+      );
+      const reply = await message.channel.send({
+        embeds: [embed],
+        components: [row],
+      });
       await wait(180000);
       await reply.delete();
     }
   }
 });
+/*
+const filter = (i) =>
+  i.customId === "primary" && i.user.id === "122157285790187530";
+const collector = interaction.channel.createMessageComponentCollector({
+  filter,
+  time: 15000,
+});
+*/
 client.login(TOKEN);
