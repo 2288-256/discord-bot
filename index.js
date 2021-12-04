@@ -164,17 +164,17 @@ client.on("interactionCreate", async (interaction) => {
       .setFields(
         {
           name: "Botの名前",
-          value: client.user.tag,
+          value: "`" + client.user.tag + "`",
           inline: true,
         },
         {
           name: "起動OS",
-          value: process.env.OS,
+          value: "`" + process.env.OS + "`",
           inline: true,
         },
         {
           name: "Node.js バージョン",
-          value: process.env.node_version,
+          value: "`" + process.env.node_version + "`",
           inline: true,
         },
         {
@@ -199,7 +199,8 @@ client.on("interactionCreate", async (interaction) => {
         },
         {
           name: "起動時間",
-          value: days + "日" + hours + "時間" + min + "分" + sec + "秒",
+          value:
+            "`" + days + "日" + hours + "時間" + min + "分" + sec + "秒" + "`",
           inline: true,
         },
         {
