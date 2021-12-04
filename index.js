@@ -147,19 +147,11 @@ client.on("interactionCreate", async (interaction) => {
     await interaction.reply({ content: "test", components: [row] });
   }
 });
-const filter = (i) =>
-  i.customId === "primary" && i.user.id === "122157285790187530";
-/*
-  const collector = interaction.channel.createMessageComponentCollector({
-  filter,
-  time: 15000,
-});
-*/
-collector.on("collect", async (i) => {
-  if (i.customId === "message-delete") {
-    if (i.user.id === userid) {
-      await i.deleteReply();
-    }
+client.on("interactionCreate", async (interaction) => {
+  if (interaction.customId === "message-delete") {
+    //if (interaction.user.id === userid) {
+    await i.deleteReply();
+    //}
   }
 });
 client.login(TOKEN);
