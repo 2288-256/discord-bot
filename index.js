@@ -234,25 +234,20 @@ client.on("interactionCreate", async (interaction) => {
         interaction.user.tag + "がstopを使用しましたが失敗しました"
       );
     } else {
-      var url =
+      const https = require("https");
+      const req = https.request(
         "https://api.mojang.com/users/profiles/minecraft/" +
-        interaction.options.data.value;
-      https.get(url, function (res) {
-        res;
-        var data = []
-          .on("data", function (chunk) {
-            data.push(chunk);
-          })
-          .on("end", function () {
-            var events = Buffer.concat(data);
-            var r = JSON.parse(events);
-            console.log(r);
-            interaction.reply({
-              content: "`" + r + "`",
-              ephemeral: true,
-            });
+          interaction.options.data.value,
+        (res) => {
+          res.on("data", (chunk) => {
+            console.log(chunk);
           });
-      });
+          res.on("end", () => {
+            console.log("---以上---");
+          });
+        }
+      );
+      req.end();
     }
   }
 });
