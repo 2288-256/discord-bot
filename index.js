@@ -238,7 +238,7 @@ client.on("interactionCreate", async (interaction) => {
       var data = [];
       const req = https.request(
         "https://api.mojang.com/users/profiles/minecraft/" +
-          interaction.options.data.value[0],
+          interaction.data.options[0].value,
         (res) => {
           res.on("data", (chunk) => {
             data.push(chunk);
@@ -248,7 +248,7 @@ client.on("interactionCreate", async (interaction) => {
             var r = JSON.parse(events);
             console.log(r);
             interaction.reply({
-              content: r.id + "\n" + interaction.options.data.value[0],
+              content: r.id + "\n" + interaction.data.options[0].value,
               ephemeral: true,
             });
           });
