@@ -236,7 +236,7 @@ client.on("interactionCreate", async (interaction) => {
     } else {
       var url =
         "https://api.mojang.com/users/profiles/minecraft/" +
-        interaction.data.options[0].value;
+        interaction.options.data.value;
       https.get(url, function (res) {
         res
           .on("data", function (chunk) {
