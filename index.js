@@ -238,7 +238,8 @@ client.on("interactionCreate", async (interaction) => {
         "https://api.mojang.com/users/profiles/minecraft/" +
         interaction.options.data.value;
       https.get(url, function (res) {
-        res
+        res;
+        var data = []
           .on("data", function (chunk) {
             data.push(chunk);
           })
