@@ -7,6 +7,7 @@ const client = new Client({
 require("dotenv").config();
 var packagejson = require("./package.json");
 const TOKEN = process.env.DISCORD_TOKEN;
+var https = require("https");
 
 const usedCommandRecently = new Set();
 const usedCommandRecently1 = new Set();
@@ -219,6 +220,32 @@ client.on("interactionCreate", async (interaction) => {
           random -= weight[i];
         }
       }
+    }
+  }
+  if (interaction.commandName === uuid) {
+    if (interaction.user.id !== "669735475270909972") {
+      interaction.reply({
+        content: "あなたにはこのBotを停止する権限がありません",
+        ephemeral: true,
+      });
+      return console.log(
+        interaction.user.tag + "がstopを使用しましたが失敗しました"
+      );
+    } else {
+      var url =
+        "https://api.mojang.com/users/profiles/minecraft/" +
+        interaction.data.options[0].value;
+      https.get(url, function (res) {
+        res
+          .on("data", function (chunk) {
+            data.push(chunk);
+          })
+          .on("end", function () {
+            var events = Buffer.concat(data);
+            var r = JSON.parse(events);
+            console.log(r);
+          });
+      });
     }
   }
 });
