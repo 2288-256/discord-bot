@@ -247,6 +247,10 @@ client.on("interactionCreate", async (interaction) => {
             var events = Buffer.concat(data);
             var r = JSON.parse(events);
             console.log(r);
+            interaction.reply({
+              content: r.id,
+              ephemeral: true,
+            });
           });
         }
       );
