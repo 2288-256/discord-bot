@@ -45,7 +45,7 @@ client.on("messageCreate", async (message) => {
     });
   }
   if (message.content.match(/ヨシ|よし/)) {
-    message.channel.send("<:yosi:916695133863411712>");
+    message.channel.send("<:touka_yosi:916710636891824229>");
   }
 });
 client.on("interactionCreate", async (interaction) => {
@@ -60,7 +60,7 @@ client.on("interactionCreate", async (interaction) => {
     await interaction.editReply(
       [
         ...msg,
-        `RTT: ${Date.now() - now}ms\n\n反応あり...<:yosi:916695133863411712>`,
+        `RTT: ${Date.now() - now}ms\n\n反応あり...<:touka_yosi:916710636891824229>`,
       ].join("\n")
     );
     console.log(interaction.user.tag + "がpingを使用しました");
