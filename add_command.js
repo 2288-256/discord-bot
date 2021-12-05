@@ -37,8 +37,15 @@ const test = {
 const uuid = {
   name: "uuid",
   description: "[未実装]マインクラフトIDを入力するとUUIDを返します",
-  type: 3,
-  required: true,
+  type: 1,
+  options: [
+    {
+      name: "uuid",
+      description: "Java版のユーザー名を入力してください",
+      type: 3,
+      required: true,
+    },
+  ],
 };
 const commands = [leave, ping, omikuzi, slot, botinfo, stop, test, uuid];
 const client = new Client({
