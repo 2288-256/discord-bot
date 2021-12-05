@@ -34,7 +34,20 @@ const test = {
   name: `test`,
   description: `テストコマンド`,
 };
-const commands = [leave, ping, omikuzi, slot, botinfo, stop, test];
+const uuid = {
+  name: "uuid",
+  description: "[未実装]マインクラフトIDを入力するとUUIDを返します",
+  type: 1,
+  options: [
+    {
+      name: "uuid1",
+      description: "Java版のユーザー名を入力してください",
+      type: 3,
+      required: true,
+    },
+  ],
+};
+const commands = [leave, ping, omikuzi, slot, botinfo, stop, test, uuid];
 const client = new Client({
   intents: 0,
 });

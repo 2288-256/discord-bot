@@ -226,6 +226,38 @@ client.on(`interactionCreate`, async (interaction) => {
       }
     }
   }
+  if (interaction.commandName === `uuid`) {
+    if (interaction.user.id !== `669735475270909972`) {
+      interaction.reply({
+        content: `あなたにはこのBotを停止する権限がありません`,
+        ephemeral: true,
+      });
+      return console.log(`${user.tag}がstopを使用しましたが失敗しました`);
+    } else {
+      const https = require(`https`);
+      var data = [];
+      const req = https.request(
+        `https://api.mojang.com/users/profiles/minecraft/` +
+          `2288256` /*interaction.data.options[0].value*/,
+        (res) => {
+          res.on(`data`, (chunk) => {
+            data.push(chunk);
+          });
+          res.on(`end`, () => {
+            var events = Buffer.concat(data);
+            var r = JSON.parse(events);
+            //const a = options.getString(`uuid1`);
+            console.log(options.getNu); /*
+            interaction.reply({
+              content: r.id + `\n` + interaction.data.options[0].value,
+              ephemeral: true,
+            });*/
+          });
+        }
+      );
+      req.end();
+    }
+  }
 });
 client.on(`interactionCreate`, async (interaction) => {
   if (interaction.customId === `test`) {
