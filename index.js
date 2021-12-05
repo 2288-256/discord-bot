@@ -244,7 +244,7 @@ client.on("interactionCreate", async (interaction) => {
             data.push(chunk);
           });
           res.on("end", () => {
-            var events = Buffer.content(data);
+            var events = Buffer.concat(data);
             var r = JSON.parse(events);
             console.log(r);
           });
