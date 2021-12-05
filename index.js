@@ -62,8 +62,8 @@ client.on(`interactionCreate`, async (interaction) => {
 	if (commandName === `ping`) {
 		const now = Date.now();
 		const msg = [`GW: ${client.ws.ping}ms`];
-		await reply({ content: msg.join(`\n`), ephemeral: true });
-		await editReply(
+		await interaction.reply({ content: msg.join(`\n`), ephemeral: true });
+		await interaction.editReply(
 			[
 				...msg,
 				`RTT: ${
@@ -76,33 +76,33 @@ client.on(`interactionCreate`, async (interaction) => {
 	}
 	if (commandName === `leave`) {
 		if (guild === null) {
-			reply(
+			interaction.reply(
 				`この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？`
 			);
 			await wait(5000);
-			editReply(`DMは対応していません`);
+			interaction.editReply(`DMは対応していません`);
 		} else {
 			if (member.id !== `669735475270909972`) {
-				reply({
+				interaction.reply({
 					content: `あなたにはこのBotをKickする権限がありません`,
 					ephemeral: true,
 				});
 				return console.log(`${member.user.tag}がleaveを使用しました`);
 			} else {
-				await reply(`サーバーからKickしました`);
+				await interaction.reply(`サーバーからKickしました`);
 				await guild.leave();
 			}
 		}
 	}
 	if (commandName === `stop`) {
 		if (user.id !== `669735475270909972`) {
-			reply({
+			interaction.reply({
 				content: `あなたにはこのBotを停止する権限がありません`,
 				ephemeral: true,
 			});
 			return console.log(`${user.tag}がstopを使用しましたが失敗しました`);
 		} else {
-			await reply(`Botを停止しました`);
+			await interaction.reply(`Botを停止しました`);
 			await process.exit();
 		}
 	}
@@ -113,7 +113,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				.setLabel(`テスト`)
 				.setStyle(`SUCCESS`)
 		);
-		await reply({
+		await interaction.reply({
 			content: `test`,
 			components: [row],
 			ephemeral: true,
@@ -262,7 +262,7 @@ client.on(`interactionCreate`, async (interaction) => {
 	client.on(`interactionCreate`, async (interaction) => {
 		const { reply, customId } = interaction;
 		if (customId === `test`) {
-			await reply({
+			await interaction.reply({
 				content: `ボタンが押されました。`,
 				ephemeral: true,
 			});
@@ -299,7 +299,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				)
 				.setTimestamp()
 				.setFooter(`このメッセージはあなただけに表示されています`);
-			await reply({
+			await interaction.reply({
 				const: `Q&A`,
 				embeds: [embed],
 				ephemeral: true,
