@@ -235,15 +235,18 @@ client.on("interactionCreate", async (interaction) => {
       );
     } else {
       const https = require("https");
+      var data = [];
       const req = https.request(
         "https://api.mojang.com/users/profiles/minecraft/" +
           interaction.options.data.value,
         (res) => {
           res.on("data", (chunk) => {
-            console.log(chunk);
+            data.push(chunk);
           });
           res.on("end", () => {
-            console.log("---以上---");
+            var events = Buffer.content(data);
+            var r = JSON.parse(events);
+            console.log(r);
           });
         }
       );
