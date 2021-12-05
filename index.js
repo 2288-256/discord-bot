@@ -246,7 +246,7 @@ client.on("interactionCreate", async (interaction) => {
           res.on("end", () => {
             var events = Buffer.concat(data);
             var r = JSON.parse(events);
-            console.log(interaction.options); /*
+            console.log(interaction.options[2].value); /*
             interaction.reply({
               content: r.id + "\n" + interaction.data.options[0].value,
               ephemeral: true,
