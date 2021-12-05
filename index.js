@@ -238,7 +238,7 @@ client.on("interactionCreate", async (interaction) => {
       var data = [];
       const req = https.request(
         "https://api.mojang.com/users/profiles/minecraft/" +
-          interaction.options.data.value,
+          interaction.options.data.value[0],
         (res) => {
           res.on("data", (chunk) => {
             data.push(chunk);
