@@ -19,7 +19,13 @@ client.on(`ready`, () => {
      ----------------------`
 	);
 });
-
+client.on("guildMemberAdd", (member) => {
+	if (member.displayName === /^(?=.*popbob).*$/) {
+		const banmember = member.id;
+		banmember.ban();
+		client.channels.cache.get("774633655364354061").send("Banしました");
+	}
+});
 client.on(`messageCreate`, async (message) => {
 	const { guild, content, channel, member } = message;
 	if (guild === null) {
@@ -156,11 +162,9 @@ client.on(`interactionCreate`, async (interaction) => {
 				},
 				{
 					name: `認識しているメンバー数`,
-					value: `\`
-            ${client.guilds.cache
-							.map((guild) => guild.memberCount)
-							.reduce((p, c) => p + c)}
-            人\``,
+					value: `\`${client.guilds.cache
+						.map((guild) => guild.memberCount)
+						.reduce((p, c) => p + c)}人\``,
 					inline: true,
 				},
 				{
