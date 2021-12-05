@@ -262,7 +262,7 @@ client.on(`interactionCreate`, async (interaction) => {
 	client.on(`interactionCreate`, async (interaction) => {
 		const { reply, customId } = interaction;
 		if (customId === `test`) {
-			await interaction.reply({
+			interaction.reply({
 				content: `ボタンが押されました。`,
 				ephemeral: true,
 			});
