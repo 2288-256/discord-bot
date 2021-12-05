@@ -60,7 +60,9 @@ client.on("interactionCreate", async (interaction) => {
     await interaction.editReply(
       [
         ...msg,
-        `RTT: ${Date.now() - now}ms\n\n反応あり...<:touka_yosi:916710636891824229>`,
+        `RTT: ${
+          Date.now() - now
+        }ms\n\n反応あり...<:touka_yosi:916710636891824229>`,
       ].join("\n")
     );
     console.log(interaction.user.tag + "がpingを使用しました");
@@ -244,6 +246,10 @@ client.on("interactionCreate", async (interaction) => {
             var events = Buffer.concat(data);
             var r = JSON.parse(events);
             console.log(r);
+            interaction.reply({
+              content: "`" + r + "`",
+              ephemeral: true,
+            });
           });
       });
     }
