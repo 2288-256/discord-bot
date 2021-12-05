@@ -27,35 +27,20 @@ client.on("guildMemberAdd", (member) => {
 	}
 });
 client.on(`messageCreate`, async (message) => {
-	const { guild, content, channel, member } = message;
+	const { guild, content, channel } = message;
 	if (guild === null) {
 		return;
 	}
 	if (
 		content.match(/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/)
 	) {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId(`no-join-message-send`)
-				.setLabel(`サーバーに参加できない場合`)
-				.setStyle(`DANGER`)
-		);
 	}
 	if (content.match(/ヨシ|よし/)) {
 		channel.send(yosi);
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
-	const {
-		commandName,
-		options,
-		member,
-		guild,
-		reply,
-		user,
-		editReply,
-		client,
-	} = interaction;
+	const { commandName, options, member, guild, user, client } = interaction;
 	if (!interaction.isCommand()) {
 		return;
 	}
@@ -238,7 +223,6 @@ client.on(`interactionCreate`, async (interaction) => {
 						data.push(chunk);
 					});
 					res.on(`end`, () => {
-						var events = Buffer.concat(data);
 						//const a = options.getString(`uuid1`);
 						console.log(options.getNu); /*
             interaction.reply({
@@ -260,7 +244,7 @@ client.on(`interactionCreate`, async (interaction) => {
 		});
 	}
 	client.on(`interactionCreate`, async (interaction) => {
-		const { reply, customId } = interaction;
+		const { customId } = interaction;
 		if (customId === `test`) {
 			interaction.reply({
 				content: `ボタンが押されました。`,
