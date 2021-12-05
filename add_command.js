@@ -40,7 +40,7 @@ const uuid = {
   type: 1,
   options: [
     {
-      name: "uuid",
+      name: "uuid1",
       description: "Java版のユーザー名を入力してください",
       type: 3,
       required: true,

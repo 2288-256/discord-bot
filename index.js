@@ -246,7 +246,7 @@ client.on("interactionCreate", async (interaction) => {
           res.on("end", () => {
             var events = Buffer.concat(data);
             var r = JSON.parse(events);
-            var a = options.getString("uuid");
+            const a = options.getString("uuid1");
             console.log(a); /*
             interaction.reply({
               content: r.id + "\n" + interaction.data.options[0].value,
