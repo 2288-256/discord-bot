@@ -224,7 +224,7 @@ client.on("interactionCreate", async (interaction) => {
       }
     }
   }
-  if (interaction.commandName === uuid) {
+  if (interaction.data.name === uuid) {
     if (interaction.user.id !== "669735475270909972") {
       interaction.reply({
         content: "あなたにはこのBotを停止する権限がありません",
