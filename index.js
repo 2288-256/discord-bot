@@ -248,7 +248,7 @@ client.on("interactionCreate", async (interaction) => {
             var r = JSON.parse(events);
             console.log(r);
             interaction.reply({
-              content: r.id,
+              content: r.id + "\n" + interaction.options.data.value,
               ephemeral: true,
             });
           });
