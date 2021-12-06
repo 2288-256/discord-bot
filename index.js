@@ -224,7 +224,7 @@ client.on(`interactionCreate`, async (interaction) => {
           });
           res.on(`end`, () => {
             //const a = options.getString(`uuid1`);
-            console.log(options); /*
+            console.log(options.getValue()); /*
             interaction.reply({
               content: r.id + `\n` + interaction.data.options[0].value,
               ephemeral: true,
