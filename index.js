@@ -218,7 +218,6 @@ client.on(`interactionCreate`, async (interaction) => {
         option.setName("uuid1").setDescription("uuid")
       );
       const https = require(`https`);
-      var data = [];
       const req = https.request(
         `https://api.mojang.com/users/profiles/minecraft/` +
           `2288256` /*interaction.data.options[0].value*/,
