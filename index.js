@@ -1,3 +1,4 @@
+import DiscordJS, { Intents } from "discord.js";
 const Discord = require(`discord.js`);
 const { Client, Intents } = require(`discord.js`);
 const { MessageActionRow, MessageButton } = require(`discord.js`);
@@ -40,7 +41,7 @@ client.on(`messageCreate`, async (message) => {
   }
 });
 client.on(`interactionCreate`, async (interaction) => {
-  const { commandName, /*options*/ member, guild, user, client } = interaction;
+  const { commandName, options, member, guild, user, client } = interaction;
   if (!interaction.isCommand()) {
     return;
   }
@@ -223,7 +224,7 @@ client.on(`interactionCreate`, async (interaction) => {
             data.push(chunk);
           });
           res.on(`end`, () => {
-            const string = interaction.options.get(value);
+            const string = options.getString(`uuid1`);
             console.log(string); /*
             interaction.reply({
               content: r.id + `\n` + interaction.data.options[0].value,

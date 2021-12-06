@@ -1,3 +1,4 @@
+import DiscordJS, { Intents } from "discord.js";
 const { Client, ClientApplication } = require(`discord.js`);
 async function register(client, commands, guildID) {
   if (guildID == null) {
@@ -42,7 +43,7 @@ const uuid = {
     {
       name: "uuid1",
       description: "Java版のユーザー名を入力してください",
-      type: 3,
+      type: DiscordJS.Constants.applicationCommandOptionTypes.STRING,
       required: true,
     },
   ],
