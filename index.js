@@ -1,6 +1,7 @@
 const Discord = require(`discord.js`);
 const { Client, Intents } = require(`discord.js`);
 const { MessageActionRow, MessageButton } = require(`discord.js`);
+const { SlachCommandBuilder } = require("@duscirdjs/builders");
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
@@ -40,7 +41,7 @@ client.on(`messageCreate`, async (message) => {
   }
 });
 client.on(`interactionCreate`, async (interaction) => {
-  const { commandName, options, member, guild, user, client } = interaction;
+  const { commandName, /*options*/ member, guild, user, client } = interaction;
   if (!interaction.isCommand()) {
     return;
   }
@@ -213,6 +214,9 @@ client.on(`interactionCreate`, async (interaction) => {
       });
       return console.log(`${user.tag}がuuidを使用しましたが失敗しました`);
     } else {
+      const data = new SlachCommandBuilder().addStringOption((option) =>
+        option.setName("uuid1").setDescription("uuid")
+      );
       const https = require(`https`);
       var data = [];
       const req = https.request(
@@ -223,8 +227,8 @@ client.on(`interactionCreate`, async (interaction) => {
             data.push(chunk);
           });
           res.on(`end`, () => {
-            //const a = options.getString(`uuid1`);
-            console.log(options.getValue()); /*
+            const string = interaction.options.getString("uuid1");
+            console.log(string); /*
             interaction.reply({
               content: r.id + `\n` + interaction.data.options[0].value,
               ephemeral: true,
