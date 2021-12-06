@@ -223,7 +223,7 @@ client.on(`interactionCreate`, async (interaction) => {
             data.push(chunk);
           });
           res.on(`end`, () => {
-            const string = interaction.options.get(`value`);
+            const string = interaction.options.get(`name`);
             console.log(string); /*
             interaction.reply({
               content: r.id + `\n` + interaction.data.options[0].value,
