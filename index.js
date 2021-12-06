@@ -1,7 +1,6 @@
 const Discord = require(`discord.js`);
 const { Client, Intents } = require(`discord.js`);
 const { MessageActionRow, MessageButton } = require(`discord.js`);
-const { SlachCommandBuilder } = require("@duscirdjs/builders");
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
@@ -214,10 +213,8 @@ client.on(`interactionCreate`, async (interaction) => {
       });
       return console.log(`${user.tag}がuuidを使用しましたが失敗しました`);
     } else {
-      const data = new SlachCommandBuilder().addStringOption((option) =>
-        option.setName("uuid1").setDescription("uuid")
-      );
       const https = require(`https`);
+      var data = [];
       const req = https.request(
         `https://api.mojang.com/users/profiles/minecraft/` +
           `2288256` /*interaction.data.options[0].value*/,
@@ -226,7 +223,7 @@ client.on(`interactionCreate`, async (interaction) => {
             data.push(chunk);
           });
           res.on(`end`, () => {
-            const string = interaction.options.getString("uuid1");
+            const string = interaction.options.get(`uuid1`).value;
             console.log(string); /*
             interaction.reply({
               content: r.id + `\n` + interaction.data.options[0].value,
