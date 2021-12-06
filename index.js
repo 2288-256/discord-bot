@@ -1,11 +1,9 @@
 import DiscordJS, { Intents } from "discord.js";
-const Discord = require(`discord.js`);
-const { Client, Intents } = require(`discord.js`);
-const { MessageActionRow, MessageButton } = require(`discord.js`);
+import dotenv from "dotenv";
+dotenv.config();
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-require(`dotenv`).config();
 var packagejson = require(`./package.json`);
 const TOKEN = process.env.DISCORD_TOKEN;
 const wait = require(`util`).promisify(setTimeout);
@@ -112,7 +110,7 @@ client.on(`interactionCreate`, async (interaction) => {
     const hours = Math.floor(time / 1000 / 60 / 60) % 24;
     const days = Math.floor(time / 1000 / 60 / 60 / 24);
     var d = new Date(client.readyTimestamp);
-    const embed1 = new Discord.MessageEmbed()
+    const embed1 = new DiscordJS.MessageEmbed()
       .setColor(`RANDOM`)
       .setTitle(`Botの詳細`)
       .setFields(
@@ -253,7 +251,7 @@ client.on(`interactionCreate`, async (interaction) => {
       });
     }
     if (customId === `no-join-message-send`) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new DiscordJS.MessageEmbed()
         .setColor(`RANDOM`)
         .setTitle(`サーバーに参加できない方向け`)
         .setDescription(`確認事項一覧`)
