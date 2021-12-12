@@ -16,11 +16,11 @@ const ping = {
 };
 const omikuzi = {
 	name: `omikuzi`,
-	description: `実装予定(今は動きません)`,
+	description: `実装予定`,
 };
 const slot = {
 	name: `slot`,
-	description: `実装予定(今は動きません)`,
+	description: `実装予定`,
 };
 const botinfo = {
 	name: `botinfo`,
@@ -47,7 +47,21 @@ const uuid = {
 		},
 	],
 };
-const commands = [leave, ping, omikuzi, slot, botinfo, restart, test, uuid];
+const maintenance = {
+	name: "maintenance",
+	description: "メンテナンスモードを切り替えます",
+};
+const commands = [
+	leave,
+	ping,
+	omikuzi,
+	slot,
+	botinfo,
+	restart,
+	test,
+	uuid,
+	maintenance,
+];
 const client = new Client({
 	intents: 0,
 });

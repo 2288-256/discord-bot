@@ -6,6 +6,7 @@ const client = new Client({
 const status = require("minecraft-server-api");
 require(`dotenv`).config();
 var packagejson = require(`./package.json`);
+var config = require(`./config.json`);
 const TOKEN = process.env.DISCORD_TOKEN;
 const wait = require(`util`).promisify(setTimeout);
 const usedCommandRecently1 = new Set();
@@ -14,49 +15,60 @@ const yosi = `<:touka_yosi:916710636891824229>`;
 const cron = require("node-cron");
 const mcapi = require("minecraft-lookup");
 const { MessageActionRow, MessageButton } = require(`discord.js`);
+var fs = require("fs");
+var path = require("path");
+var maintenance = config.maintenance;
 
 client.on(`ready`, () => {
-	client.user.setActivity({
-		name: `再起動しました`,
-	});
-	setInterval(() => {
-		const time = client.uptime;
-		const sec = Math.floor(time / 1000) % 60;
-		const min = Math.floor(time / 1000 / 60) % 60;
-		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
-		const days = Math.floor(time / 1000 / 60 / 60 / 24);
-		var d = new Date(client.readyTimestamp);
-		let message = [
-			`稼働時間:${days}日${hours}時間${min}分${sec}秒`,
-			`Ping:${client.ws.ping}ms`,
-			`Version:${packagejson.version}`,
-			`${client.guilds.cache
-				.map((guild) => guild.memberCount)
-				.reduce((p, c) => p + c)}人を監視中`,
-			`${client.guilds.cache.size}サーバーを監視中`,
-			`最終起動日:${d.toLocaleString()}`,
-			`コマンドは全てSlashCommandです`,
-		];
-		let weight = [3, 2, 1, 2, 2, 3, 1];
-		let totalWeight = 0;
-		for (var i = 0; i < weight.length; i++) {
-			totalWeight += weight[i];
-		}
-		let random = Math.floor(Math.random() * totalWeight);
-		for (var i = 0; i < weight.length; i++) {
-			if (random < weight[i]) {
-				client.user.setActivity({
-					name: `${message[i]}`,
-				});
-				return;
-			} else {
-				random -= weight[i];
+	if (config.maintenance === false) {
+		client.user.setActivity({
+			name: `再起動しました`,
+		});
+		setInterval(() => {
+			const time = client.uptime;
+			const sec = Math.floor(time / 1000) % 60;
+			const min = Math.floor(time / 1000 / 60) % 60;
+			const hours = Math.floor(time / 1000 / 60 / 60) % 24;
+			const days = Math.floor(time / 1000 / 60 / 60 / 24);
+			var d = new Date(client.readyTimestamp);
+			let message = [
+				`稼働時間:${days}日${hours}時間${min}分${sec}秒`,
+				`Ping:${client.ws.ping}ms`,
+				`Version:${packagejson.version}`,
+				`${client.guilds.cache
+					.map((guild) => guild.memberCount)
+					.reduce((p, c) => p + c)}人を監視中`,
+				`${client.guilds.cache.size}サーバーを監視中`,
+				`最終起動日:${d.toLocaleString()}`,
+				`コマンドは全てSlashCommandです`,
+			];
+			let weight = [3, 2, 1, 2, 2, 3, 1];
+			let totalWeight = 0;
+			for (var i = 0; i < weight.length; i++) {
+				totalWeight += weight[i];
 			}
-		}
-	}, 15000);
-	console.log(
-		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
-	);
+			let random = Math.floor(Math.random() * totalWeight);
+			for (var i = 0; i < weight.length; i++) {
+				if (random < weight[i]) {
+					client.user.setActivity({
+						name: `${message[i]}`,
+					});
+					return;
+				} else {
+					random -= weight[i];
+				}
+			}
+		}, 15000);
+		console.log(
+			`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
+		);
+	}
+	if (config.maintenance === true) {
+		client.user.setActivity({
+			name: `メンテナンス中です`,
+		});
+		console.log(`メンテナンスモードで起動中`);
+	}
 });
 client.on(`messageCreate`, async (message) => {
 	const { guild, content, channel } = message;
@@ -77,8 +89,11 @@ client.on(`messageCreate`, async (message) => {
 			components: [row],
 		});
 	}
-	if (content.match(/ヨシ|よし/)) {
-		channel.send(yosi);
+	if (content.match(/ヨシ|よし|ﾖｼ|yosi|yoshi/)) {
+		message.react("916710636891824229");
+	}
+	if (content.match(/うどん|饂飩|udon|ウドン|ｳﾄﾞﾝ/)) {
+		message.react("919560243460055060");
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
@@ -92,6 +107,14 @@ client.on(`interactionCreate`, async (interaction) => {
 		);
 		await wait(5000);
 		return interaction.editReply(`DMは対応していません`);
+	}
+	if (member.id !== `669735475270909972`) {
+		if (maintenance === true) {
+			return interaction.reply({
+				content: `メンテナンスモードの為実行できません`,
+				ephemeral: true,
+			});
+		}
 	}
 	if (commandName === `ping`) {
 		const now = Date.now();
@@ -120,15 +143,15 @@ client.on(`interactionCreate`, async (interaction) => {
 			await guild.leave();
 		}
 	}
-	if (commandName === `stop`) {
+	if (commandName === `restart`) {
 		if (user.id !== `669735475270909972`) {
 			interaction.reply({
-				content: `あなたにはこのBotを停止する権限がありません`,
+				content: `あなたにはこのBotを再起動する権限がありません`,
 				ephemeral: true,
 			});
-			return console.log(`${user.tag}がstopを使用しましたが失敗しました`);
+			return console.log(`${user.tag}がrestartを使用しましたが失敗しました`);
 		} else {
-			await interaction.reply(`Botを停止しました`);
+			await interaction.reply(`Botを再起動しました`);
 			client.user.setActivity({
 				name: `再起動中・・・`,
 			});
@@ -136,10 +159,6 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (commandName === `test`) {
-		interaction.reply({
-			content: `テスト`,
-			ephemeral: true,
-		});
 	}
 	if (commandName === `botinfo`) {
 		const time = client.uptime;
@@ -200,10 +219,8 @@ client.on(`interactionCreate`, async (interaction) => {
 					inline: true,
 				}
 			);
-		console.log(`処理前`);
 		interaction.reply({ embeds: [embed1], ephemeral: true });
 		console.log(`${interaction.user.tag}がbotinfoを使用しました`);
-		console.log(`処理後`);
 	}
 	if (interaction.commandName === `omikuzi`) {
 		if (usedCommandRecently1.has(interaction.user.id)) {
@@ -251,6 +268,12 @@ client.on(`interactionCreate`, async (interaction) => {
 			return;
 		} else {
 			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
+				if (data === undefined) {
+					interaction.reply({
+						content: `MCIDが存在しません`,
+						ephemeral: true,
+					});
+				}
 				const str = data.id;
 				const a = str.substring(0, 8);
 				const b = `-`;
@@ -271,6 +294,62 @@ client.on(`interactionCreate`, async (interaction) => {
 	if (interaction.commandName === `test1`) {
 		interaction.reply({
 			content: `テスト1`,
+			ephemeral: true,
+		});
+	}
+	if (interaction.commandName === `maintenance`) {
+		if (user.id !== `669735475270909972`) {
+			return interaction.reply({
+				content: `実行する権限がありません`,
+				ephemeral: true,
+			});
+		} else {
+			var config = JSON.parse(
+				fs.readFileSync(path.resolve(__dirname, "./config.json"))
+			);
+			if (maintenance === true) {
+				interaction.reply({
+					content: `メンテナンスモードをoffにしました。`,
+				});
+				config.maintenance = false;
+				fs.writeFileSync(
+					path.resolve(__dirname, "./config.json"),
+					JSON.stringify(config, null, "  "),
+					"utf-8"
+				);
+				client.user.setActivity({
+					name: `再起動中・・・`,
+				});
+				await wait(5000);
+				await process.exit();
+			} else {
+				interaction.reply({
+					content: `メンテナンスモードをonにしました。`,
+				});
+				config.maintenance = true;
+				fs.writeFileSync(
+					path.resolve(__dirname, "./config.json"),
+					JSON.stringify(config, null, "  "),
+					"utf-8"
+				);
+				client.user.setActivity({
+					name: `再起動中・・・`,
+				});
+				await wait(5000);
+				await process.exit();
+			}
+		}
+	}
+	if (interaction.commandName === `slot`) {
+		const row = new MessageActionRow().addComponents(
+			new MessageButton()
+				.setCustomId("slot")
+				.setLabel("回す(β版)")
+				.setStyle("DANGER")
+		);
+		interaction.reply({
+			content: `スロット`,
+			components: [row],
 			ephemeral: true,
 		});
 	}
@@ -316,10 +395,97 @@ client.on(`interactionCreate`, async (interaction) => {
 			.setTimestamp()
 			.setFooter(`このメッセージはあなただけに表示されています`);
 		await interaction.reply({
-			const: `Q&A`,
+			content: `Q&A`,
 			embeds: [embed],
 			ephemeral: true,
 		});
+	}
+	if (customId === `slot`) {
+		let slot = [
+			`〇〇〇`,
+			`〇〇×`,
+			`〇〇△`,
+			`〇×〇`,
+			`〇××`,
+			`〇×△`,
+			`〇△〇`,
+			`〇△×`,
+			`〇△△`,
+			`×〇〇`,
+			`×〇×`,
+			`×〇△`,
+			`××〇`,
+			`×××`,
+			`××△`,
+			`×△〇`,
+			`×△×`,
+			`×△△`,
+			`△〇〇`,
+			`△〇×`,
+			`△〇△`,
+			`△×〇`,
+			`△××`,
+			`△×△`,
+			`△△〇`,
+			`△△×`,
+			`△△△`,
+		];
+		let weight = [
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1,
+		];
+		let totalWeight = 0;
+		for (var i = 0; i < weight.length; i++) {
+			totalWeight += weight[i];
+		}
+		let random = Math.floor(Math.random() * totalWeight);
+		for (var i = 0; i < weight.length; i++) {
+			if (random < weight[i]) {
+				if (slot[i] !== /〇〇〇|×××|△△△/) {
+					const str = slot[i];
+					const a1 = str.substring(0, 1);
+					const b1 = str.substring(1, 2);
+					const c1 = str.substring(2, 3);
+					const a2 = a1.replace("△", ":mahjong:");
+					const a3 = a2.replace("×", ":black_joker:");
+					const a = a3.replace("〇", ":flower_playing_cards:");
+					const b2 = b1.replace("△", ":mahjong:");
+					const b3 = b2.replace("×", ":black_joker:");
+					const b = b3.replace("〇", ":flower_playing_cards:");
+					const c2 = c1.replace("△", ":mahjong:");
+					const c3 = c2.replace("×", ":black_joker:");
+					const c = c3.replace("〇", ":flower_playing_cards:");
+					await interaction.reply({ content: a, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({ content: a + b, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({ content: a + b + c, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({
+						content: a + b + c + "\nハズレ",
+						ephemeral: true,
+					});
+					return;
+				} else {
+					const str = slot[i];
+					const a = str.substring(0, 1);
+					const b = str.substring(1, 2);
+					const c = str.substring(2, 3);
+					await interaction.reply({ content: a, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({ content: a + b, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({ content: a + b + c, ephemeral: true });
+					await wait(2000);
+					await interaction.editReply({
+						content: a + b + c + "\nハズレ",
+						ephemeral: true,
+					});
+				}
+			} else {
+				random -= weight[i];
+			}
+		}
 	}
 });
 
