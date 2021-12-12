@@ -21,13 +21,6 @@ client.on(`ready`, () => {
      ----------------------`
 	);
 });
-client.on("guildMemberAdd", (member) => {
-	if (member.displayName === /^(?=.*popbob).*$/) {
-		const banmember = member.id;
-		banmember.ban();
-		client.channels.cache.get("774633655364354061").send("Banしました");
-	}
-});
 client.on(`messageCreate`, async (message) => {
 	const { guild, content, channel } = message;
 	if (guild === null) {
