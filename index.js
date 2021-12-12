@@ -288,17 +288,4 @@ client.on(`interactionCreate`, async (interaction) => {
 	});
 });
 
-function observe(interval, onGet, onChanged) {
-	let previousValue = onGet();
-	const onObserve = function () {
-		const VALUE = onGet();
-		if (previousValue === VALUE) return;
-
-		onChanged(VALUE);
-		previousValue = VALUE;
-	};
-
-	setInterval(onObserve, interval);
-}
-
 client.login(TOKEN);
