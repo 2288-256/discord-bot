@@ -16,12 +16,16 @@ const mcapi = require("minecraft-lookup");
 const { MessageActionRow, MessageButton } = require(`discord.js`);
 
 client.on(`ready`, () => {
+	client.user.setActivity({
+		name: `再起動しました`,
+	});
 	setInterval(() => {
 		const time = client.uptime;
 		const sec = Math.floor(time / 1000) % 60;
 		const min = Math.floor(time / 1000 / 60) % 60;
 		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
 		const days = Math.floor(time / 1000 / 60 / 60 / 24);
+		var d = new Date(client.readyTimestamp);
 		let message = [
 			`稼働時間:${days}日${hours}時間${min}分${sec}秒`,
 			`Ping:${client.ws.ping}ms`,
@@ -29,10 +33,11 @@ client.on(`ready`, () => {
 			`${client.guilds.cache
 				.map((guild) => guild.memberCount)
 				.reduce((p, c) => p + c)}人を監視中`,
-			`${client.guilds.cache.size}サーバーを認識中`,
+			`${client.guilds.cache.size}サーバーを監視中`,
+			`最終起動日:${d.toLocaleString()}`,
 			`コマンドは全てSlashCommandです`,
 		];
-		let weight = [1, 1, 1, 1, 1];
+		let weight = [3, 2, 1, 2, 2, 3, 1];
 		let totalWeight = 0;
 		for (var i = 0; i < weight.length; i++) {
 			totalWeight += weight[i];
@@ -48,7 +53,7 @@ client.on(`ready`, () => {
 				random -= weight[i];
 			}
 		}
-	}, 30000);
+	}, 15000);
 	console.log(
 		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 	);
@@ -124,6 +129,9 @@ client.on(`interactionCreate`, async (interaction) => {
 			return console.log(`${user.tag}がstopを使用しましたが失敗しました`);
 		} else {
 			await interaction.reply(`Botを停止しました`);
+			client.user.setActivity({
+				name: `再起動中・・・`,
+			});
 			await process.exit();
 		}
 	}
