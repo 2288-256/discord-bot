@@ -15,6 +15,11 @@ const cron = require("node-cron");
 const mcapi = require("minecraft-lookup");
 
 client.on(`ready`, () => {
+	setInterval(() => {
+		client.user.setActivity({
+			name: `${client.ws.ping}ms`,
+		});
+	}, 1000);
 	console.log(
 		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 	);
