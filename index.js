@@ -13,13 +13,9 @@ const usedCommandRecently1 = new Set();
 const yosi = `<:touka_yosi:916710636891824229>`;
 const cron = require("node-cron");
 const mcapi = require("minecraft-lookup");
+const { MessageActionRow, MessageButton } = require(`discord.js`);
 
 client.on(`ready`, () => {
-	setInterval(() => {
-		client.user.setActivity({
-			name: `${client.ws.ping}ms`,
-		});
-	}, 1000);
 	console.log(
 		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 	);
@@ -32,6 +28,16 @@ client.on(`messageCreate`, async (message) => {
 	if (
 		content.match(/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/)
 	) {
+		const row = new MessageActionRow().addComponents(
+			new MessageButton()
+				.setCustomId("no-join-message-send")
+				.setLabel("サーバーに参加できない場合")
+				.setStyle("DANGER")
+		);
+		channel.send({
+			content: `[<@${message.member.user.id}>さんが質問されました||<@669735475270909972>||]\n`,
+			components: [row],
+		});
 	}
 	if (content.match(/ヨシ|よし/)) {
 		channel.send(yosi);
