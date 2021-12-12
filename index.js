@@ -1,7 +1,7 @@
-const Discord = require(`discord.js`);
-const { Client, Intents } = require(`discord.js`);
-const { MessageActionRow, MessageButton } = require(`discord.js`);
-const client = new Client({
+import DiscordJS, { Intents } from "discord.js";
+import dotenv from "dotenv";
+dotenv.config();
+const client = new DiscordJS.Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 const status = require("minecraft-server-api");
@@ -249,7 +249,7 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 		}
 		if (customId === `no-join-message-send`) {
-			const embed = new Discord.MessageEmbed()
+			const embed = new DiscordJS.MessageEmbed()
 				.setColor(`RANDOM`)
 				.setTitle(`サーバーに参加できない方向け`)
 				.setDescription(`確認事項一覧`)
