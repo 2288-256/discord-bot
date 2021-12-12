@@ -1,4 +1,4 @@
-import DiscordJS, { Intents } from "discord.js";
+const { Client, ClientApplication } = require(`discord.js`);
 async function register(client, commands, guildID) {
 	if (guildID == null) {
 		return client.application.commands.set(commands);
