@@ -16,6 +16,39 @@ const mcapi = require("minecraft-lookup");
 const { MessageActionRow, MessageButton } = require(`discord.js`);
 
 client.on(`ready`, () => {
+	setInterval(() => {
+		const time = client.uptime;
+		const sec = Math.floor(time / 1000) % 60;
+		const min = Math.floor(time / 1000 / 60) % 60;
+		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
+		const days = Math.floor(time / 1000 / 60 / 60 / 24);
+		let message = [
+			`稼働時間:${days}日${hours}時間${min}分${sec}秒`,
+			`Ping:${client.ws.ping}ms`,
+			`Version:${packagejson.version}`,
+			`${client.guilds.cache
+				.map((guild) => guild.memberCount)
+				.reduce((p, c) => p + c)}人を監視中`,
+			`${client.guilds.cache.size}サーバーを認識中`,
+			`コマンドは全てSlashCommandです`,
+		];
+		let weight = [1, 1, 1, 1, 1];
+		let totalWeight = 0;
+		for (var i = 0; i < weight.length; i++) {
+			totalWeight += weight[i];
+		}
+		let random = Math.floor(Math.random() * totalWeight);
+		for (var i = 0; i < weight.length; i++) {
+			if (random < weight[i]) {
+				client.user.setActivity({
+					name: `${message[i]}`,
+				});
+				return;
+			} else {
+				random -= weight[i];
+			}
+		}
+	}, 30000);
 	console.log(
 		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 	);
@@ -235,59 +268,51 @@ client.on(`interactionCreate`, async (interaction) => {
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
-	if (interaction.customId === `test`) {
-		await interaction.reply({
+	const { customId } = interaction;
+	if (customId === `test`) {
+		interaction.reply({
 			content: `ボタンが押されました。`,
 			ephemeral: true,
 		});
 	}
-	client.on(`interactionCreate`, async (interaction) => {
-		const { customId } = interaction;
-		if (customId === `test`) {
-			interaction.reply({
-				content: `ボタンが押されました。`,
-				ephemeral: true,
-			});
-		}
-		if (customId === `no-join-message-send`) {
-			const embed = new Discord.MessageEmbed()
-				.setColor(`RANDOM`)
-				.setTitle(`サーバーに参加できない方向け`)
-				.setDescription(`確認事項一覧`)
-				.setFields(
-					{
-						name: `ステップ1`,
-						value: `<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)`,
-					},
-					{
-						name: `ステップ2`,
-						value: `サーバーアドレスやポートがあっているか？`,
-					},
-					{
-						name: `解決したら`,
-						value: `質問のメッセージを消してください\n解決したかどうかはわかりません`,
-					},
-					{
-						name: `解決しなかったら`,
-						value: `先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません`,
-					},
-					{
-						name: `その他`,
-						value: `以下の様な画像の場合は<@669735475270909972>にDMを送って対応をお待ちください`,
-					}
-				)
-				.setImage(
-					`https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png`
-				)
-				.setTimestamp()
-				.setFooter(`このメッセージはあなただけに表示されています`);
-			await interaction.reply({
-				const: `Q&A`,
-				embeds: [embed],
-				ephemeral: true,
-			});
-		}
-	});
+	if (customId === `no-join-message-send`) {
+		const embed = new Discord.MessageEmbed()
+			.setColor(`RANDOM`)
+			.setTitle(`サーバーに参加できない方向け`)
+			.setDescription(`確認事項一覧`)
+			.setFields(
+				{
+					name: `ステップ1`,
+					value: `<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)`,
+				},
+				{
+					name: `ステップ2`,
+					value: `サーバーアドレスやポートがあっているか？`,
+				},
+				{
+					name: `解決したら`,
+					value: `質問のメッセージを消してください\n解決したかどうかはわかりません`,
+				},
+				{
+					name: `解決しなかったら`,
+					value: `先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません`,
+				},
+				{
+					name: `その他`,
+					value: `以下の様な画像の場合は<@669735475270909972>にDMを送って対応をお待ちください`,
+				}
+			)
+			.setImage(
+				`https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png`
+			)
+			.setTimestamp()
+			.setFooter(`このメッセージはあなただけに表示されています`);
+		await interaction.reply({
+			const: `Q&A`,
+			embeds: [embed],
+			ephemeral: true,
+		});
+	}
 });
 
 client.login(TOKEN);
