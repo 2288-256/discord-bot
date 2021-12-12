@@ -16,9 +16,7 @@ const mcapi = require("minecraft-lookup");
 
 client.on(`ready`, () => {
 	console.log(
-		`Logged in as ${client.user.tag}!\n
-     location: ${process.env.OS}\n
-     ----------------------`
+		`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 	);
 });
 client.on(`messageCreate`, async (message) => {
