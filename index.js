@@ -4,6 +4,7 @@ const { MessageActionRow, MessageButton } = require(`discord.js`);
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
+const status = require("minecraft-server-api");
 require(`dotenv`).config();
 var packagejson = require(`./package.json`);
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -11,6 +12,8 @@ const wait = require(`util`).promisify(setTimeout);
 const usedCommandRecently1 = new Set();
 //    絵文字↓
 const yosi = `<:touka_yosi:916710636891824229>`;
+const cron = require("node-cron");
+const mcapi = require("minecraft-lookup");
 
 client.on(`ready`, () => {
 	console.log(
@@ -44,6 +47,13 @@ client.on(`interactionCreate`, async (interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
+	if (guild === null) {
+		interaction.reply(
+			`この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？`
+		);
+		await wait(5000);
+		return interaction.editReply(`DMは対応していません`);
+	}
 	if (commandName === `ping`) {
 		const now = Date.now();
 		const msg = [`GW: ${client.ws.ping}ms`];
@@ -60,23 +70,15 @@ client.on(`interactionCreate`, async (interaction) => {
 		return;
 	}
 	if (commandName === `leave`) {
-		if (guild === null) {
-			interaction.reply(
-				`この機能なかったらBot落ちてたんだぞ？？？\n対策はしたけどむやみに送信するのはやめてね？`
-			);
-			await wait(5000);
-			interaction.editReply(`DMは対応していません`);
+		if (member.id !== `669735475270909972`) {
+			interaction.reply({
+				content: `あなたにはこのBotをKickする権限がありません`,
+				ephemeral: true,
+			});
+			return console.log(`${member.user.tag}がleaveを使用しました`);
 		} else {
-			if (member.id !== `669735475270909972`) {
-				interaction.reply({
-					content: `あなたにはこのBotをKickする権限がありません`,
-					ephemeral: true,
-				});
-				return console.log(`${member.user.tag}がleaveを使用しました`);
-			} else {
-				await interaction.reply(`サーバーからKickしました`);
-				await guild.leave();
-			}
+			await interaction.reply(`サーバーからKickしました`);
+			await guild.leave();
 		}
 	}
 	if (commandName === `stop`) {
@@ -92,15 +94,8 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (commandName === `test`) {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId(`test`)
-				.setLabel(`テスト`)
-				.setStyle(`SUCCESS`)
-		);
-		await interaction.reply({
-			content: `test`,
-			components: [row],
+		interaction.reply({
+			content: `テスト`,
 			ephemeral: true,
 		});
 	}
@@ -132,7 +127,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				},
 				{
 					name: `Node.js バージョン`,
-					value: `\`${process.env.node_version}\``,
+					value: `\`${packagejson.engines[`node`]}\``,
 					inline: true,
 				},
 				{
@@ -206,34 +201,36 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (interaction.commandName === `uuid`) {
-		if (interaction.user.id !== `669735475270909972`) {
+		if (interaction.channel.id !== `904429990429491280`) {
 			interaction.reply({
-				content: `あなたにはこのBotを停止する権限がありません`,
+				content: `ここでは実行できません\n<#904429990429491280>で実行してください`,
 				ephemeral: true,
 			});
-			return console.log(`${user.tag}がstopを使用しましたが失敗しました`);
+			return;
 		} else {
-			const https = require(`https`);
-			var data = [];
-			const req = https.request(
-				`https://api.mojang.com/users/profiles/minecraft/` +
-					`2288256` /*interaction.data.options[0].value*/,
-				(res) => {
-					res.on(`data`, (chunk) => {
-						data.push(chunk);
-					});
-					res.on(`end`, () => {
-						//const a = options.getString(`uuid1`);
-						console.log(options.getNu); /*
-            interaction.reply({
-              content: r.id + `\n` + interaction.data.options[0].value,
-              ephemeral: true,
-            });*/
-					});
-				}
-			);
-			req.end();
+			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
+				const str = data.id;
+				const a = str.substring(0, 8);
+				const b = `-`;
+				const c = str.substring(8, 12);
+				const d = str.substring(12, 16);
+				const e = str.substring(16, 20);
+				const f = str.substring(20, 32);
+				const id = a + b + c + b + d + b + e + b + f;
+				interaction.reply({
+					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです`,
+				});
+				interaction.followUp({
+					content: id,
+				});
+			});
 		}
+	}
+	if (interaction.commandName === `test1`) {
+		interaction.reply({
+			content: `テスト1`,
+			ephemeral: true,
+		});
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
@@ -291,4 +288,18 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	});
 });
+
+function observe(interval, onGet, onChanged) {
+	let previousValue = onGet();
+	const onObserve = function () {
+		const VALUE = onGet();
+		if (previousValue === VALUE) return;
+
+		onChanged(VALUE);
+		previousValue = VALUE;
+	};
+
+	setInterval(onObserve, interval);
+}
+
 client.login(TOKEN);
