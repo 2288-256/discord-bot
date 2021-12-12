@@ -478,7 +478,7 @@ client.on(`interactionCreate`, async (interaction) => {
 					await interaction.editReply({ content: a + b + c, ephemeral: true });
 					await wait(2000);
 					await interaction.editReply({
-						content: a + b + c + "\nハズレ",
+						content: a + b + c + "\n🎯当たり🎯",
 						ephemeral: true,
 					});
 				}
