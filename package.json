@@ -9,7 +9,7 @@
     "request": "^2.88.2"
   },
   "name": "discord-bot",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
