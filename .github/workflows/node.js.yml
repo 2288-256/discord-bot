@@ -32,3 +32,4 @@ jobs:
         echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
     - run: npm ci
     - run: npm test
+    
