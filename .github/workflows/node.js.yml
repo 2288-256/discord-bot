@@ -32,4 +32,3 @@ jobs:
         echo "${{ secrets.DISCORD_TOKEN }}" >> .env
     - run: npm ci
     - run: npm test
-    
