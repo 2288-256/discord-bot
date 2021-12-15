@@ -18,6 +18,8 @@ jobs:
       matrix:
         node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -29,7 +31,7 @@ jobs:
       shell: bash
       run: |
         touch .env
-        echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
+        echo "DISCORD_TOKEN=$DISCORD_TOKEN" >> .env
     - run: npm ci
     - run: npm test
     
