@@ -25,7 +25,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: Create dot env file
+      shell: bash
+      run: |
+        touch .env
+        echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
     - run: npm ci
-    - run: touch .env
-    - run: echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
     - run: npm test
