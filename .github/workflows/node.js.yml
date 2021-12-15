@@ -28,9 +28,8 @@ jobs:
     - name: Create dot env file
       shell: bash
       run: |
-        echo ${{ secrets.DISCORD_TOKEN }}
         touch .env
-        echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
+        echo "DISCORD_TOKEN=OTIwNjU1OTQ4NzA2NjIzNTI4.Ybnhqw.mDHVLukKXahj_CWJ_XYObSsVsv0 }}" >> .env
     - run: npm ci
     - run: npm test
     
