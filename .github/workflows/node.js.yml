@@ -29,7 +29,7 @@ jobs:
       shell: bash
       run: |
         touch .env
-        echo "DISCORD_TOKEN=OTIwNjU1OTQ4NzA2NjIzNTI4.Ybnhqw.mDHVLukKXahj_CWJ_XYObSsVsv0 }}" >> .env
+        echo "${{ secrets.DISCORD_TOKEN }}" >> .env
     - run: npm ci
     - run: npm test
     
