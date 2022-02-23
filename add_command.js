@@ -82,10 +82,28 @@ const send = {
 		},
 
 		{
-			name: "message",
-			description: "送信したいメッセージを入力してください",
+			name: "line1",
+			description: "[1行目]送信したいメッセージを入力してください",
 			type: 3,
 			required: true,
+		},
+		{
+			name: "line2",
+			description: "[2行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
+		},
+		{
+			name: "line3",
+			description: "[3行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
+		},
+		{
+			name: "line4",
+			description: "[4行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
 		},
 	],
 };
