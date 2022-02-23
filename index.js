@@ -19,7 +19,6 @@ const { MessageActionRow, MessageButton } = require(`discord.js`);
 var fs = require("fs");
 var path = require("path");
 var maintenance = config.maintenance;
-const { lookupUUID } = require("namemc");
 
 client.on(`ready`, () => {
 	if (config.maintenance === false) {
@@ -226,51 +225,6 @@ client.on(`interactionCreate`, async (interaction) => {
 			);
 		interaction.reply({ embeds: [embed1], ephemeral: true });
 		console.log(`${interaction.user.tag}がbotinfoを使用しました`);
-	}
-	if (interaction.commandName === `omikuzi`) {
-		if (interaction.channel.id !== `904429990429491280`) {
-			interaction.reply({
-				content: `ここでは実行できません\n<#904429990429491280>で実行してください`,
-				ephemeral: true,
-			});
-			return;
-		} else {
-			if (usedCommandRecently1.has(interaction.user.id)) {
-				console.log(`クールダウン時間中`);
-				interaction.reply({
-					content: `おみくじは一日一回しか引けません`,
-					ephemeral: true,
-				});
-			} else {
-				usedCommandRecently1.add(interaction.user.id);
-				setTimeout(() => {
-					usedCommandRecently1.delete(interaction.user.id);
-				}, 86400000);
-				let omikuzi = [
-					`大吉`,
-					`中吉`,
-					`小吉`,
-					`凶`,
-					`大大吉`,
-					`中小吉`,
-					`小中吉`,
-				];
-				let weight = [200, 500, 800, 1, 10, 700, 600];
-				let totalWeight = 0;
-				for (var i = 0; i < weight.length; i++) {
-					totalWeight += weight[i];
-				}
-				let random = Math.floor(Math.random() * totalWeight);
-				for (var i = 0; i < weight.length; i++) {
-					if (random < weight[i]) {
-						interaction.reply(omikuzi[i]);
-						return;
-					} else {
-						random -= weight[i];
-					}
-				}
-			}
-		}
 	}
 	if (interaction.commandName === `mcid`) {
 		if (interaction.channel.id !== `904429990429491280`) {
