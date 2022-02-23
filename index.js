@@ -489,14 +489,16 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 		}
 	}
-	if (interaction.commandId === "send") {
+	if (interaction.commandName === "send") {
 		if (member.id !== `669735475270909972`) {
 			return interaction.reply({
 				content: `このコマンドは許可されていません`,
 			});
 		}
 		console.log(interaction.options._hoistedOptions[0].value);
-		//client.channels.cache.get('送信するチャンネルのID').send('メッセージ')
+		client.channels.cache
+			.get(interaction.options._hoistedOptions[0].value)
+			.send(interaction.options._hoistedOptions[1].value);
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
