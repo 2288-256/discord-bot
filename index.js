@@ -3,20 +3,16 @@ const { Client, Intents } = require(`discord.js`);
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-const status = require("minecraft-server-api");
 require(`dotenv`).config();
 var packagejson = require(`./package.json`);
 var config = require(`./config.json`);
 var https = require("https");
 const TOKEN = process.env.DISCORD_TOKEN;
 const wait = require(`util`).promisify(setTimeout);
-const usedCommandRecently1 = new Set();
 //    絵文字↓
 const yosi = `<:touka_yosi:916710636891824229>`;
 const load = `<a:load:945990887203287040>`;
-const cron = require("node-cron");
 const mcapi = require("minecraft-lookup");
-const { MessageActionRow, MessageButton } = require(`discord.js`);
 var fs = require("fs");
 var path = require("path");
 var maintenance = config.maintenance;
