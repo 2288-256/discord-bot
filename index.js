@@ -76,22 +76,6 @@ client.on(`messageCreate`, async (message) => {
 	if (guild === null) {
 		return;
 	}
-	/*
-	if (
-		content.match(/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/)
-	) {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId("no-join-message-send")
-				.setLabel("サーバーに参加できない場合")
-				.setStyle("DANGER")
-		);
-		channel.send({
-			content: `[<@${message.member.user.id}>さんが質問されました||<@669735475270909972>||]\n`,
-			components: [row],
-		});
-	}
-	*/
 	if (content.match(/ヨシ|よし|ﾖｼ|yosi|yoshi/)) {
 		message.react("916710636891824229");
 	}
