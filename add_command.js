@@ -35,12 +35,12 @@ const test = {
 	description: `テストコマンド`,
 };
 const uuid = {
-	name: "mcid",
+	name: "uuid",
 	description: "MCIDを入力するとUUIDを返します",
 	type: 1,
 	options: [
 		{
-			name: "mcid",
+			name: "uuid",
 			description: "Java版のユーザー名を入力してください",
 			type: 3,
 			required: true,
@@ -50,44 +50,6 @@ const uuid = {
 const maintenance = {
 	name: "maintenance",
 	description: "メンテナンスモードを切り替えます",
-};
-const serverlist = {
-	name: "serverlist",
-	description: "[未実装]PlayerWorldのサーバーリストを表示します",
-};
-const serverinfo = {
-	name: "serverinfo",
-	description: "PlayerWorldのサーバー詳細情報を表示します",
-	type: 1,
-	options: [
-		{
-			name: "mcid",
-			description:
-				"サーバーの詳細情報を表示したいJava版のユーザー名を入力してください",
-			type: 3,
-			required: true,
-		},
-	],
-};
-const send = {
-	name: "send",
-	description: "指定したチャンネルにメッセージを送信します",
-	type: 1,
-	options: [
-		{
-			name: "channelid",
-			description: "送信したいチャンネル名を入力してください",
-			type: 3,
-			required: true,
-		},
-
-		{
-			name: "message",
-			description: "送信したいメッセージを入力してください",
-			type: 3,
-			required: true,
-		},
-	],
 };
 const commands = [
 	leave,
@@ -99,9 +61,6 @@ const commands = [
 	test,
 	uuid,
 	maintenance,
-	serverlist,
-	serverinfo,
-	send,
 ];
 const client = new Client({
 	intents: 0,

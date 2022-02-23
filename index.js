@@ -7,7 +7,6 @@ const status = require("minecraft-server-api");
 require(`dotenv`).config();
 var packagejson = require(`./package.json`);
 var config = require(`./config.json`);
-var https = require("https");
 const TOKEN = process.env.DISCORD_TOKEN;
 const wait = require(`util`).promisify(setTimeout);
 const usedCommandRecently1 = new Set();
@@ -76,7 +75,6 @@ client.on(`messageCreate`, async (message) => {
 	if (guild === null) {
 		return;
 	}
-	/*
 	if (
 		content.match(/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/)
 	) {
@@ -91,7 +89,6 @@ client.on(`messageCreate`, async (message) => {
 			components: [row],
 		});
 	}
-	*/
 	if (content.match(/ヨシ|よし|ﾖｼ|yosi|yoshi/)) {
 		message.react("916710636891824229");
 	}
@@ -162,7 +159,6 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (commandName === `test`) {
-		interaction.guild.roles.forEach((role) => console.log(role.name, role.id));
 	}
 	if (commandName === `botinfo`) {
 		const time = client.uptime;
@@ -226,7 +222,44 @@ client.on(`interactionCreate`, async (interaction) => {
 		interaction.reply({ embeds: [embed1], ephemeral: true });
 		console.log(`${interaction.user.tag}がbotinfoを使用しました`);
 	}
-	if (interaction.commandName === `mcid`) {
+	if (interaction.commandName === `omikuzi`) {
+		if (usedCommandRecently1.has(interaction.user.id)) {
+			console.log(`クールダウン時間中`);
+			interaction.reply({
+				content: `おみくじは一日一回しか引けません`,
+				ephemeral: true,
+			});
+		} else {
+			usedCommandRecently1.add(interaction.user.id);
+			setTimeout(() => {
+				usedCommandRecently1.delete(interaction.user.id);
+			}, 86400000);
+			let omikuzi = [
+				`大吉`,
+				`中吉`,
+				`小吉`,
+				`凶`,
+				`大大吉`,
+				`中小吉`,
+				`小中吉`,
+			];
+			let weight = [200, 500, 800, 1, 10, 700, 600];
+			let totalWeight = 0;
+			for (var i = 0; i < weight.length; i++) {
+				totalWeight += weight[i];
+			}
+			let random = Math.floor(Math.random() * totalWeight);
+			for (var i = 0; i < weight.length; i++) {
+				if (random < weight[i]) {
+					interaction.reply(omikuzi[i]);
+					return;
+				} else {
+					random -= weight[i];
+				}
+			}
+		}
+	}
+	if (interaction.commandName === `uuid`) {
 		if (interaction.channel.id !== `904429990429491280`) {
 			interaction.reply({
 				content: `ここでは実行できません\n<#904429990429491280>で実行してください`,
@@ -234,12 +267,6 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 			return;
 		} else {
-			if (/[a-zA-Z_0-9]/.test(check) === false) {
-				interaction.reply({
-					content: `英数字+アンダーバーを使用してください`,
-				});
-				return;
-			}
 			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
 				if (data === undefined) {
 					interaction.reply({
@@ -325,178 +352,6 @@ client.on(`interactionCreate`, async (interaction) => {
 			components: [row],
 			ephemeral: true,
 		});
-	}
-	if (interaction.commandName === `serverlist`) {
-		/*
-		var url = "https://api.zpw.jp/serverlist/index.php";
-		var data = [];
-		var list = [];
-		https.get(url, function (res) {
-			res
-				.on("data", function (chunk) {
-					data.push(chunk);
-				})
-				.on("end", function () {
-					var events = Buffer.concat(data);
-					var r = JSON.parse(events);
-
-					//console.log(r);
-
-					//for (var i = 0; i < r.length; i++) {
-					var servername = r.servername;
-					var serverexp = r.serverexp;
-					list += { name: r.no };
-					list += {
-						name: `サーバー名`,
-						value: `\`${servername}\``,
-						inline: true,
-					};
-					list += {
-						name: `サーバー説明`,
-						value: `\`${serverexp}\``,
-						inline: true,
-					};
-					//}
-					console.log(list);
-
-					const embed1 = new Discord.MessageEmbed()
-						.setColor("RANDOM")
-						.setTitle(`サーバーリスト`)
-						.setFields(list);
-
-					interaction.reply({
-						embeds: [embed1],
-						ephemeral: true,
-					});
-				});
-		});
-		*/
-		interaction.reply({
-			content: `現在製作中です`,
-			ephemeral: true,
-		});
-	}
-	if (interaction.commandName === `serverinfo`) {
-		if (interaction.channel.id !== `904429990429491280`) {
-			interaction.reply({
-				content: `ここでは実行できません\n<#904429990429491280>で実行してください`,
-				ephemeral: true,
-			});
-			return;
-		} else {
-			const check = interaction.options._hoistedOptions[0].value;
-			if (/[a-zA-Z_0-9]/.test(check) === false) {
-				interaction.reply({
-					content: `英数字+アンダーバーを使用してください`,
-				});
-				return;
-			}
-			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
-				if (data === undefined) {
-					interaction.reply({
-						content: `MCIDが存在しません\n(BEのユーザには対応していません)`,
-					});
-					return;
-				}
-				const str = data.id;
-				const a = str.substring(0, 8);
-				const b = `-`;
-				const c = str.substring(8, 12);
-				const d = str.substring(12, 16);
-				const e = str.substring(16, 20);
-				const f = str.substring(20, 32);
-				const id = a + b + c + b + d + b + e + b + f;
-				var url = "https://api.zpw.jp/?id=" + id;
-				var data = [];
-				https.get(url, function (res) {
-					res
-						.on("data", function (chunk) {
-							data.push(chunk);
-						})
-						.on("end", function () {
-							var events = Buffer.concat(data);
-							var r = JSON.parse(events);
-							if (r.maxplayer === null) {
-								interaction.reply({
-									content: `以下の理由で表示できませんでした\n・このプレイヤーがサーバーにまだ参加していない\n・サーバーをまだ作成していない`,
-								});
-								return;
-							}
-							var icon;
-							var Color;
-							if (r.online === "online") {
-								var Color = "0x00FF00";
-								var icon = ":green_circle:";
-							} else {
-								var Color = "0xFF0000";
-								var icon = ":red_circle:";
-							}
-							const embed1 = new Discord.MessageEmbed()
-								.setColor(Color)
-								.setTitle(`${icon} ${r.servername}サーバーの情報`)
-								.setFields(
-									{
-										name: `サーバー名`,
-										value: `\`${r.servername}\``,
-										inline: true,
-									},
-									{
-										name: `サーバー説明`,
-										value: `\`${r.serverexp}\``,
-										inline: true,
-									},
-									{
-										name: `サーバー管理者`,
-										value: `\`${interaction.options._hoistedOptions[0].value}\``,
-										inline: true,
-									},
-									{
-										name: `人数`,
-										value: `\`${r.onlineplayer}/${r.maxplayer}\``,
-										inline: true,
-									},
-									{
-										name: `サーバーソフト`,
-										value: `\`${r.servertype}\``,
-										inline: true,
-									},
-									{
-										name: `バージョン`,
-										value: `\`${r.version}\``,
-										inline: true,
-									},
-									{
-										name: `IP`,
-										value: `\`${r.serverip}\``,
-										inline: true,
-									},
-									{
-										name: `投票数`,
-										value: `\`${r.votes}\``,
-										inline: true,
-									},
-									{
-										name: `サーバー状態`,
-										value: `\`${r.online}\``,
-										inline: true,
-									}
-								);
-							interaction.reply({
-								embeds: [embed1],
-							});
-						});
-				});
-			});
-		}
-	}
-	if (interaction.commandId === "send") {
-		if (member.id !== `669735475270909972`) {
-			return interaction.reply({
-				content: `このコマンドは許可されていません`,
-			});
-		}
-		console.log(interaction.options._hoistedOptions[0].value);
-		//client.channels.cache.get('送信するチャンネルのID').send('メッセージ')
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
