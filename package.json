@@ -14,7 +14,8 @@
   "version": "1.6.1",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "lint": "eslint --fix 'src/**/{*.js,*.jsx}'"
   },
   "repository": {
     "type": "git",
