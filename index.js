@@ -493,13 +493,59 @@ client.on(`interactionCreate`, async (interaction) => {
 		if (member.id !== `669735475270909972`) {
 			return interaction.reply({
 				content: `このコマンドは許可されていません`,
+				ephemeral: true,
 			});
 		}
-		client.channels.cache
-			.get(interaction.options._hoistedOptions[0].value)
-			.send(interaction.options._hoistedOptions[1].value);
+		var message1 = interaction.options._hoistedOptions[1].value;
+		if (interaction.options._hoistedOptions[2] !== undefined) {
+			var message2 = interaction.options._hoistedOptions[2].value;
+			if (interaction.options._hoistedOptions[3] !== undefined) {
+				var message3 = interaction.options._hoistedOptions[3].value;
+				if (interaction.options._hoistedOptions[4] !== undefined) {
+					var message4 = interaction.options._hoistedOptions[4].value;
+				}
+			}
+		}
+		if (interaction.options._hoistedOptions[2] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>に\n「\`${message1}\`」\nを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[3] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[4] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}\n${message3}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[4] !== undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}\n${message3}\n${message4}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+
 		interaction.reply({
-			content: `<#${interaction.options._hoistedOptions[0].value}に${interaction.options._hoistedOptions[1].value}を送信しました>`,
+			content: `<#${interaction.options._hoistedOptions[0].value}>に\n「\`${message0}\n${message1}\n${message2}\n${message3}\`」\nを送信しました`,
+			ephemeral: true,
 		});
 	}
 });
