@@ -422,6 +422,8 @@ client.on(`interactionCreate`, async (interaction) => {
 								});
 								return;
 							}
+							var icon = [];
+							var Color = [];
 							if (r.online === "online") {
 								var Color = "0x00FF00";
 								var icon = ":green_circle:";
