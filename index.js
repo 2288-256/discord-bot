@@ -495,10 +495,12 @@ client.on(`interactionCreate`, async (interaction) => {
 				content: `このコマンドは許可されていません`,
 			});
 		}
-		console.log(interaction.options._hoistedOptions[0].value);
 		client.channels.cache
 			.get(interaction.options._hoistedOptions[0].value)
 			.send(interaction.options._hoistedOptions[1].value);
+		interaction.reply({
+			content: `<#${interaction.options._hoistedOptions[0].value}に${interaction.options._hoistedOptions[1].value}を送信しました>`,
+		});
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
