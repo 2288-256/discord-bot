@@ -515,6 +515,12 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 });
+if (commandName === `invite`) {
+	interaction.reply({
+		content: `このBotの招待リンクは↓です\n\`\`\`https://discord.com/api/oauth2/authorize?client_id=915609498285142027&permissions=1099511884864&scope=bot%20applications.commands\`\`\`\n現在は一部の人のみ招待可能です`,
+		ephemeral: true,
+	});
+}
 client.on(`interactionCreate`, async (interaction) => {
 	const { customId } = interaction;
 	if (customId === `test`) {

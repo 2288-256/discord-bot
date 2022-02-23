@@ -107,18 +107,9 @@ const send = {
 		},
 	],
 };
-const check = {
-	name: "check",
-	description: "特定の人の自動モデレートの警告レベルを表示します",
-	type: 1,
-	options: [
-		{
-			name: "name",
-			description: "[任意]見たい人のユーザーを指定してください",
-			type: 6,
-			required: false,
-		},
-	],
+const invite = {
+	name: "invite",
+	description: "このBotの招待リンクを送信します",
 };
 const commands = [
 	leave,
@@ -133,7 +124,7 @@ const commands = [
 	serverlist,
 	serverinfo,
 	send,
-	check,
+	invite,
 ];
 const client = new Client({
 	intents: 0,
