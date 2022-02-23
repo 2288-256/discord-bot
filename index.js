@@ -13,6 +13,7 @@ const wait = require(`util`).promisify(setTimeout);
 const usedCommandRecently1 = new Set();
 //    絵文字↓
 const yosi = `<:touka_yosi:916710636891824229>`;
+const load = `<a:load:945990887203287040>`;
 const cron = require("node-cron");
 const mcapi = require("minecraft-lookup");
 const { MessageActionRow, MessageButton } = require(`discord.js`);
@@ -146,7 +147,7 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (commandName === `test`) {
-		interaction.guild.roles.forEach((role) => console.log(role.name, role.id));
+		interaction.reply(`test`);
 	}
 	if (commandName === `botinfo`) {
 		const time = client.uptime;
@@ -218,6 +219,7 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 			return;
 		} else {
+			const check = interaction.options._hoistedOptions[0].value;
 			if (/[a-zA-Z_0-9]/.test(check) === false) {
 				interaction.reply({
 					content: `英数字+アンダーバーを使用してください`,
@@ -240,10 +242,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
 				interaction.reply({
-					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです`,
-				});
-				interaction.followUp({
-					content: id,
+					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです\n${id}`,
 				});
 			});
 		}
@@ -369,6 +368,9 @@ client.on(`interactionCreate`, async (interaction) => {
 					});
 					return;
 				}
+				interaction.reply({
+					content: `${load}データを取得しています${load}`,
+				});
 				const str = data.id;
 				const a = str.substring(0, 8);
 				const b = `-`;
@@ -377,15 +379,22 @@ client.on(`interactionCreate`, async (interaction) => {
 				const e = str.substring(16, 20);
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
-				var url = "https://api.zpw.jp/?id=" + id;
+				var url = "https://api.zpw.jp/?id="; // + id;
 				var data = [];
-				https.get(url, function (res) {
+				https.get(url, interaction, function (res) {
 					res
 						.on("data", function (chunk) {
 							data.push(chunk);
 						})
 						.on("end", function () {
 							var events = Buffer.concat(data);
+							console.log(res.statusCode);
+							if (res.statusCode !== `200`) {
+								interaction.followUp(
+									"以下の理由で表示できませんでした\n・APIサーバーがダウンしている\n・Bot側のエラー"
+								);
+								return;
+							}
 							var r = JSON.parse(events);
 							if (r.maxplayer === null) {
 								interaction.reply({
@@ -514,13 +523,13 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 		}
 	}
+	if (commandName === `invite`) {
+		interaction.reply({
+			content: `このBotの招待リンクは↓です\n\`\`\`https://discord.com/api/oauth2/authorize?client_id=915609498285142027&permissions=1099511884864&scope=bot%20applications.commands\`\`\`\n現在は一部の人のみ招待可能です`,
+			ephemeral: true,
+		});
+	}
 });
-if (commandName === `invite`) {
-	interaction.reply({
-		content: `このBotの招待リンクは↓です\n\`\`\`https://discord.com/api/oauth2/authorize?client_id=915609498285142027&permissions=1099511884864&scope=bot%20applications.commands\`\`\`\n現在は一部の人のみ招待可能です`,
-		ephemeral: true,
-	});
-}
 client.on(`interactionCreate`, async (interaction) => {
 	const { customId } = interaction;
 	if (customId === `test`) {
