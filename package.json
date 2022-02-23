@@ -4,15 +4,18 @@
     "dotenv": "^10.0.0",
     "minecraft-lookup": "^1.1.36",
     "minecraft-server-api": "^1.0.2",
+    "namemc": "^1.8.16",
     "node-cron": "^3.0.0",
     "node-fetch": "^3.1.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "xmlhttprequest": "^1.8.0"
   },
   "name": "discord-bot",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "lint": "eslint --fix 'src/**/{*.js,*.jsx}'"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,8 @@
     "url": "https://github.com/2288-256/discord-bot/issues"
   },
   "homepage": "https://github.com/2288-256/discord-bot#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "eslint": "^8.9.0"
+  }
 }
