@@ -75,19 +75,41 @@ const send = {
 	type: 1,
 	options: [
 		{
-			name: "channelid",
+			name: "channel",
 			description: "送信したいチャンネル名を入力してください",
-			type: 3,
+			type: 7,
 			required: true,
 		},
 
 		{
-			name: "message",
-			description: "送信したいメッセージを入力してください",
+			name: "line1",
+			description: "[1行目]送信したいメッセージを入力してください",
 			type: 3,
 			required: true,
 		},
+		{
+			name: "line2",
+			description: "[2行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
+		},
+		{
+			name: "line3",
+			description: "[3行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
+		},
+		{
+			name: "line4",
+			description: "[4行目]送信したいメッセージを入力してください",
+			type: 3,
+			required: false,
+		},
 	],
+};
+const invite = {
+	name: "invite",
+	description: "このBotの招待リンクを送信します",
 };
 const commands = [
 	leave,
@@ -102,6 +124,7 @@ const commands = [
 	serverlist,
 	serverinfo,
 	send,
+	invite,
 ];
 const client = new Client({
 	intents: 0,

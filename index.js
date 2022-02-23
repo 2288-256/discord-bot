@@ -3,19 +3,16 @@ const { Client, Intents } = require(`discord.js`);
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-const status = require("minecraft-server-api");
 require(`dotenv`).config();
 var packagejson = require(`./package.json`);
 var config = require(`./config.json`);
 var https = require("https");
 const TOKEN = process.env.DISCORD_TOKEN;
 const wait = require(`util`).promisify(setTimeout);
-const usedCommandRecently1 = new Set();
 //    絵文字↓
 const yosi = `<:touka_yosi:916710636891824229>`;
-const cron = require("node-cron");
+const load = `<a:load:945990887203287040>`;
 const mcapi = require("minecraft-lookup");
-const { MessageActionRow, MessageButton } = require(`discord.js`);
 var fs = require("fs");
 var path = require("path");
 var maintenance = config.maintenance;
@@ -76,22 +73,6 @@ client.on(`messageCreate`, async (message) => {
 	if (guild === null) {
 		return;
 	}
-	/*
-	if (
-		content.match(/入れな|はいれな|参加できな|さんかできな|入れん|はいれん/)
-	) {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId("no-join-message-send")
-				.setLabel("サーバーに参加できない場合")
-				.setStyle("DANGER")
-		);
-		channel.send({
-			content: `[<@${message.member.user.id}>さんが質問されました||<@669735475270909972>||]\n`,
-			components: [row],
-		});
-	}
-	*/
 	if (content.match(/ヨシ|よし|ﾖｼ|yosi|yoshi/)) {
 		message.react("916710636891824229");
 	}
@@ -162,7 +143,7 @@ client.on(`interactionCreate`, async (interaction) => {
 		}
 	}
 	if (commandName === `test`) {
-		interaction.guild.roles.forEach((role) => console.log(role.name, role.id));
+		interaction.reply(`test`);
 	}
 	if (commandName === `botinfo`) {
 		const time = client.uptime;
@@ -234,6 +215,7 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 			return;
 		} else {
+			const check = interaction.options._hoistedOptions[0].value;
 			if (/[a-zA-Z_0-9]/.test(check) === false) {
 				interaction.reply({
 					content: `英数字+アンダーバーを使用してください`,
@@ -256,10 +238,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
 				interaction.reply({
-					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです`,
-				});
-				interaction.followUp({
-					content: id,
+					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです\n${id}`,
 				});
 			});
 		}
@@ -312,19 +291,6 @@ client.on(`interactionCreate`, async (interaction) => {
 				await process.exit();
 			}
 		}
-	}
-	if (interaction.commandName === `slot`) {
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId("slot")
-				.setLabel("回す(β版)")
-				.setStyle("DANGER")
-		);
-		interaction.reply({
-			content: `スロット`,
-			components: [row],
-			ephemeral: true,
-		});
 	}
 	if (interaction.commandName === `serverlist`) {
 		/*
@@ -398,6 +364,9 @@ client.on(`interactionCreate`, async (interaction) => {
 					});
 					return;
 				}
+				interaction.reply({
+					content: `${load}データを取得しています${load}`,
+				});
 				const str = data.id;
 				const a = str.substring(0, 8);
 				const b = `-`;
@@ -406,15 +375,22 @@ client.on(`interactionCreate`, async (interaction) => {
 				const e = str.substring(16, 20);
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
-				var url = "https://api.zpw.jp/?id=" + id;
+				var url = "https://api.zpw.jp/?id="; // + id;
 				var data = [];
-				https.get(url, function (res) {
+				https.get(url, interaction, function (res) {
 					res
 						.on("data", function (chunk) {
 							data.push(chunk);
 						})
 						.on("end", function () {
 							var events = Buffer.concat(data);
+							console.log(res.statusCode);
+							if (res.statusCode !== `200`) {
+								interaction.followUp(
+									"以下の理由で表示できませんでした\n・APIサーバーがダウンしている\n・Bot側のエラー"
+								);
+								return;
+							}
 							var r = JSON.parse(events);
 							if (r.maxplayer === null) {
 								interaction.reply({
@@ -489,14 +465,65 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 		}
 	}
-	if (interaction.commandId === "send") {
+	if (interaction.commandName === "send") {
 		if (member.id !== `669735475270909972`) {
 			return interaction.reply({
 				content: `このコマンドは許可されていません`,
+				ephemeral: true,
 			});
 		}
-		console.log(interaction.options._hoistedOptions[0].value);
-		//client.channels.cache.get('送信するチャンネルのID').send('メッセージ')
+		var message1 = interaction.options._hoistedOptions[1].value;
+		if (interaction.options._hoistedOptions[2] !== undefined) {
+			var message2 = interaction.options._hoistedOptions[2].value;
+			if (interaction.options._hoistedOptions[3] !== undefined) {
+				var message3 = interaction.options._hoistedOptions[3].value;
+				if (interaction.options._hoistedOptions[4] !== undefined) {
+					var message4 = interaction.options._hoistedOptions[4].value;
+				}
+			}
+		}
+		if (interaction.options._hoistedOptions[2] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>に\n「\`${message1}\`」\nを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[3] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[4] === undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}\n${message3}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+		if (interaction.options._hoistedOptions[4] !== undefined) {
+			client.channels.cache
+				.get(interaction.options._hoistedOptions[0].value)
+				.send(`${message1}\n${message2}\n${message3}\n${message4}`);
+			return interaction.reply({
+				content: `<#${interaction.options._hoistedOptions[0].value}>にメッセージを送信しました`,
+				ephemeral: true,
+			});
+		}
+	}
+	if (commandName === `invite`) {
+		interaction.reply({
+			content: `このBotの招待リンクは↓です\n\`\`\`https://discord.com/api/oauth2/authorize?client_id=915609498285142027&permissions=1099511884864&scope=bot%20applications.commands\`\`\`\n現在は一部の人のみ招待可能です`,
+			ephemeral: true,
+		});
 	}
 });
 client.on(`interactionCreate`, async (interaction) => {
@@ -504,44 +531,6 @@ client.on(`interactionCreate`, async (interaction) => {
 	if (customId === `test`) {
 		interaction.reply({
 			content: `ボタンが押されました。`,
-			ephemeral: true,
-		});
-	}
-	if (customId === `no-join-message-send`) {
-		const embed = new Discord.MessageEmbed()
-			.setColor(`RANDOM`)
-			.setTitle(`サーバーに参加できない方向け`)
-			.setDescription(`確認事項一覧`)
-			.setFields(
-				{
-					name: `ステップ1`,
-					value: `<#779310447186411520>等にサーバーメンテナンス又はサーバー閉鎖中と書かれていないか？(ピン留めにある時もあります)`,
-				},
-				{
-					name: `ステップ2`,
-					value: `サーバーアドレスやポートがあっているか？`,
-				},
-				{
-					name: `解決したら`,
-					value: `質問のメッセージを消してください\n解決したかどうかはわかりません`,
-				},
-				{
-					name: `解決しなかったら`,
-					value: `先ほど送信したメッセージを削除してどんな状況かを詳しく書いてください\n詳しく書かないと返答できません`,
-				},
-				{
-					name: `その他`,
-					value: `以下の様な画像の場合は<@669735475270909972>にDMを送って対応をお待ちください`,
-				}
-			)
-			.setImage(
-				`https://media.discordapp.net/attachments/720388991127519264/912706067392253962/unknown.png`
-			)
-			.setTimestamp()
-			.setFooter(`このメッセージはあなただけに表示されています`);
-		await interaction.reply({
-			content: `Q&A`,
-			embeds: [embed],
 			ephemeral: true,
 		});
 	}
