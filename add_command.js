@@ -75,9 +75,9 @@ const send = {
 	type: 1,
 	options: [
 		{
-			name: "channelid",
+			name: "channel",
 			description: "送信したいチャンネル名を入力してください",
-			type: 3,
+			type: 7,
 			required: true,
 		},
 
