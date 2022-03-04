@@ -100,6 +100,12 @@ client.on(`interactionCreate`, async (interaction) => {
 			});
 		}
 	}
+	if (commandName === `omikuzi`) {
+		interaction.reply({
+			comment: `このコマンドは廃止されました`,
+			ephemeral: true,
+		});
+	}
 	if (commandName === `ping`) {
 		const now = Date.now();
 		const msg = [`GW: ${client.ws.ping}ms`];
@@ -151,7 +157,7 @@ client.on(`interactionCreate`, async (interaction) => {
 		const min = Math.floor(time / 1000 / 60) % 60;
 		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
 		const days = Math.floor(time / 1000 / 60 / 60 / 24);
-		var d = new Date(client.readyTimestamp);
+		var d = dt.toFormat("YYYY/MM/DD HH24時MI分SS秒");
 		const embed1 = new Discord.MessageEmbed()
 			.setColor(`RANDOM`)
 			.setTitle(`Botの詳細`)
@@ -360,13 +366,10 @@ client.on(`interactionCreate`, async (interaction) => {
 			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
 				if (data === undefined) {
 					interaction.reply({
-						content: `MCIDが存在しません\n(BEのユーザには対応していません)`,
+						content: `\`${interaction.options._hoistedOptions[0].value}\`のユーザー名は存在しません\n(BEのユーザには対応していません)`,
 					});
 					return;
 				}
-				interaction.reply({
-					content: `${load}データを取得しています${load}`,
-				});
 				const str = data.id;
 				const a = str.substring(0, 8);
 				const b = `-`;
@@ -375,27 +378,40 @@ client.on(`interactionCreate`, async (interaction) => {
 				const e = str.substring(16, 20);
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
-				var url = "https://api.zpw.jp/?id="; // + id;
+				const url = "https://api.zpw.jp/?id=" + id; // + id;
 				var data = [];
-				https.get(url, interaction, function (res) {
+				https.get(url, function (res) {
 					res
 						.on("data", function (chunk) {
 							data.push(chunk);
 						})
 						.on("end", function () {
 							var events = Buffer.concat(data);
-							console.log(res.statusCode);
-							if (res.statusCode !== `200`) {
-								interaction.followUp(
-									"以下の理由で表示できませんでした\n・APIサーバーがダウンしている\n・Bot側のエラー"
-								);
+							var r = JSON.parse(events);
+							if (JSON.parse(events) === `取得できませんでした`) {
+								interaction.deleteReply();
+								client.channels.cache
+									.get(interaction.channelId)
+									.send("以下の理由で表示できませんでした・Bot側のエラー");
+								return;
+							}
+							if (res.statusCode !== 200) {
+								interaction.deleteReply();
+								client.channels.cache
+									.get(interaction.channelId)
+									.send(
+										"以下の理由で表示できませんでした\n・APIサーバーがダウンしている\n・Bot側のエラー"
+									);
 								return;
 							}
 							var r = JSON.parse(events);
 							if (r.maxplayer === null) {
-								interaction.reply({
-									content: `以下の理由で表示できませんでした\n・このプレイヤーがサーバーにまだ参加していない\n・サーバーをまだ作成していない`,
-								});
+								interaction.deleteReply();
+								client.channels.cache
+									.get(interaction.channelId)
+									.send(
+										`\`${interaction.options._hoistedOptions[0].value}\`のユーザー情報を以下の理由で表示できませんでした\n・このプレイヤーがサーバーにまだ参加していない\n・サーバーをまだ作成していない`
+									);
 								return;
 							}
 							var icon;
@@ -457,9 +473,15 @@ client.on(`interactionCreate`, async (interaction) => {
 										inline: true,
 									}
 								);
-							interaction.reply({
-								embeds: [embed1],
-							});
+							interaction.deleteReply();
+							client.channels.cache
+								.get(interaction.channelId)
+								.send(
+									`${interaction.user.username}#${interaction.user.discriminator}さんが実行しました\n`
+								);
+							client.channels.cache
+								.get(interaction.channelId)
+								.send({ embeds: [embed1] });
 						});
 				});
 			});
