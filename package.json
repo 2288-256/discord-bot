@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "date-utils": "^1.2.21",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "minecraft-lookup": "^1.1.36",
@@ -11,7 +12,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "name": "discord-bot",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
