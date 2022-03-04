@@ -105,7 +105,7 @@ client.on(`interactionCreate`, async (interaction) => {
 	}
 	if (commandName === `omikuzi`) {
 		interaction.reply({
-			comment: `このコマンドは廃止されました`,
+			content: `このコマンドは廃止されました`,
 			ephemeral: true,
 		});
 	}
