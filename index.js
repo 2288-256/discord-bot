@@ -16,6 +16,9 @@ const mcapi = require("minecraft-lookup");
 var fs = require("fs");
 var path = require("path");
 var maintenance = config.maintenance;
+require("date-utils");
+var dt = new Date();
+var d = dt.toFormat("YYYY/MM/DD HH24時MI分SS秒");
 
 client.on(`ready`, () => {
 	if (config.maintenance === false) {
@@ -37,7 +40,7 @@ client.on(`ready`, () => {
 					.map((guild) => guild.memberCount)
 					.reduce((p, c) => p + c)}人を監視中`,
 				`${client.guilds.cache.size}サーバーを監視中`,
-				`最終起動日:${d.toLocaleString()}`,
+				`最終起動日:${d}`,
 				`コマンドは全てSlashCommandです`,
 			];
 			let weight = [3, 2, 1, 2, 2, 3, 1];
@@ -157,7 +160,6 @@ client.on(`interactionCreate`, async (interaction) => {
 		const min = Math.floor(time / 1000 / 60) % 60;
 		const hours = Math.floor(time / 1000 / 60 / 60) % 24;
 		const days = Math.floor(time / 1000 / 60 / 60 / 24);
-		var d = dt.toFormat("YYYY/MM/DD HH24時MI分SS秒");
 		const embed1 = new Discord.MessageEmbed()
 			.setColor(`RANDOM`)
 			.setTitle(`Botの詳細`)
@@ -206,7 +208,7 @@ client.on(`interactionCreate`, async (interaction) => {
 				},
 				{
 					name: `最終起動時刻`,
-					value: `\`${d.toLocaleString()}\``,
+					value: `\`${d}\``,
 					inline: true,
 				}
 			);
