@@ -31,16 +31,15 @@ client.on(`ready`, () => {
 			const min = Math.floor(time / 1000 / 60) % 60;
 			const hours = Math.floor(time / 1000 / 60 / 60) % 24;
 			const days = Math.floor(time / 1000 / 60 / 60 / 24);
-			var d = new Date(client.readyTimestamp);
 			let message = [
-				`稼働時間:${days}日${hours}時間${min}分${sec}秒`,
-				`Ping:${client.ws.ping}ms`,
-				`Version:${packagejson.version}`,
+				`稼働時間: ${days}日${hours}時間${min}分${sec}秒`,
+				`Ping: ${client.ws.ping}ms`,
+				`Version: ${packagejson.version}`,
 				`${client.guilds.cache
 					.map((guild) => guild.memberCount)
 					.reduce((p, c) => p + c)}人を監視中`,
 				`${client.guilds.cache.size}サーバーを監視中`,
-				`最終起動日:${d}`,
+				`最終起動日: ${d}`,
 				`コマンドは全てSlashCommandです`,
 			];
 			let weight = [3, 2, 1, 2, 2, 3, 1];
@@ -372,6 +371,7 @@ client.on(`interactionCreate`, async (interaction) => {
 					});
 					return;
 				}
+				interaction.reply({ content: `${load}サーバー情報取得中${load}` });
 				const str = data.id;
 				const a = str.substring(0, 8);
 				const b = `-`;
