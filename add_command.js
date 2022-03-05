@@ -53,8 +53,8 @@ const uuid = {
 	type: 1,
 	options: [
 		{
-			name: "mcid",
-			description: "Java版のユーザー名を入力してください",
+			name: "uuid",
+			description: "UUIDを入力してください",
 			type: 3,
 			required: true,
 		},
