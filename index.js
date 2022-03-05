@@ -229,6 +229,16 @@ client.on(`interactionCreate`, async (interaction) => {
 				});
 				return;
 			}
+			if (
+				/[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/.test(
+					check
+				) === true
+			) {
+				interaction.reply({
+					content: `UUIDではなくMCIDを指定してください`,
+				});
+				return;
+			}
 			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
 				if (data === undefined) {
 					interaction.reply({
@@ -361,6 +371,16 @@ client.on(`interactionCreate`, async (interaction) => {
 			if (/[a-zA-Z_0-9]/.test(check) === false) {
 				interaction.reply({
 					content: `英数字+アンダーバーを使用してください`,
+				});
+				return;
+			}
+			if (
+				/[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/.test(
+					check
+				) === true
+			) {
+				interaction.reply({
+					content: `UUIDではなくMCIDを指定してください`,
 				});
 				return;
 			}
