@@ -235,10 +235,11 @@ client.on(`interactionCreate`, async (interaction) => {
 				) === true
 			) {
 				interaction.reply({
-					content: `UUIDではなくMCIDを指定してください`,
+					content: `MCIDを取得したい場合はuuidコマンドを使用してください`,
 				});
 				return;
 			}
+			interaction.reply({ content: `${load}データ取得中${load}` });
 			mcapi.user(interaction.options._hoistedOptions[0].value).then((data) => {
 				if (data === undefined) {
 					interaction.reply({
@@ -254,9 +255,71 @@ client.on(`interactionCreate`, async (interaction) => {
 				const e = str.substring(16, 20);
 				const f = str.substring(20, 32);
 				const id = a + b + c + b + d + b + e + b + f;
+				interaction.deleteReply();
+				client.channels.cache
+					.get(interaction.channelId)
+					.send(`\`${interaction.options._hoistedOptions[0].value}\`のUUIDは`);
+				client.channels.cache.get(interaction.channelId).send(`${id}`);
+				client.channels.cache.get(interaction.channelId).send(`です`);
+			});
+		}
+	}
+	if (interaction.commandName === `uuid`) {
+		if (interaction.channel.id !== `904429990429491280`) {
+			interaction.reply({
+				content: `ここでは実行できません\n<#904429990429491280>で実行してください`,
+				ephemeral: true,
+			});
+			return;
+		} else {
+			const check = interaction.options._hoistedOptions[0].value;
+			if (
+				/[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/.test(
+					check
+				) === false
+			) {
 				interaction.reply({
-					content: `${interaction.options._hoistedOptions[0].value}さんのUUIDです\n${id}`,
+					content: `UUIDを取得したい場合はmcidコマンドを使用してください`,
 				});
+				return;
+			}
+			const url =
+				"https://sessionserver.mojang.com/session/minecraft/profile/" +
+				interaction.options._hoistedOptions[0].value; // + id;
+			var data = [];
+			interaction.reply({ content: `${load}データ取得中${load}` });
+			https.get(url, function (res) {
+				res
+					.on("data", function (chunk) {
+						data.push(chunk);
+					})
+					.on("end", function () {
+						var events = Buffer.concat(data);
+						if (res.statusCode === 204) {
+							interaction.deleteReply();
+							return client.channels.cache
+								.get(interaction.channelId)
+								.send("以下の理由で表示できませんでした\n・UUIDが存在しない");
+						}
+						var r = JSON.parse(events);
+						if (res.statusCode !== 200) {
+							interaction.deleteReply();
+							client.channels.cache
+								.get(interaction.channelId)
+								.send(
+									"以下の理由で表示できませんでした\n・UUIDが存在しない\n・APIサーバーがダウンしている\n・Bot側のエラー"
+								);
+							return;
+						}
+						interaction.deleteReply();
+						client.channels.cache
+							.get(interaction.channelId)
+							.send(
+								`\`${interaction.options._hoistedOptions[0].value}\`のMCIDは`
+							);
+						client.channels.cache.get(interaction.channelId).send(`${r.name}`);
+						client.channels.cache.get(interaction.channelId).send(`です`);
+					});
 			});
 		}
 	}
