@@ -34,9 +34,22 @@ const test = {
 	name: `test`,
 	description: `テストコマンド`,
 };
-const uuid = {
+const mcid = {
 	name: "mcid",
 	description: "MCIDを入力するとUUIDを返します",
+	type: 1,
+	options: [
+		{
+			name: "mcid",
+			description: "Java版のユーザー名を入力してください",
+			type: 3,
+			required: true,
+		},
+	],
+};
+const uuid = {
+	name: "uuid",
+	description: "UUIDを入力するとMCIDを返します",
 	type: 1,
 	options: [
 		{
@@ -119,6 +132,7 @@ const commands = [
 	botinfo,
 	restart,
 	test,
+	mcid,
 	uuid,
 	maintenance,
 	serverlist,
