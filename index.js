@@ -15,13 +15,13 @@ const load = `<a:load:945990887203287040>`;
 const mcapi = require("minecraft-lookup");
 var fs = require("fs");
 var path = require("path");
-var maintenance = config.maintenance;
+var maintenance = process.env.maintenance;
 require("date-utils");
 var dt = new Date();
 var d = dt.toFormat("YYYY/MM/DD HH24時MI分SS秒");
 
 client.on(`ready`, () => {
-	if (config.maintenance === false) {
+	if (maintenance === false) {
 		client.user.setActivity({
 			name: `再起動しました`,
 		});
@@ -63,7 +63,7 @@ client.on(`ready`, () => {
 			`Logged in as ${client.user.tag}!\nlocation: ${process.env.OS}\n----------------------`
 		);
 	}
-	if (config.maintenance === true) {
+	if (maintenance === true) {
 		client.user.setActivity({
 			name: `メンテナンス中です`,
 		});
@@ -209,6 +209,11 @@ client.on(`interactionCreate`, async (interaction) => {
 					name: `最終起動時刻`,
 					value: `\`${d}\``,
 					inline: true,
+				},
+				{
+					name: `メンテナンスモード`,
+					value: `\`${maintenance}\``,
+					inline: true,
 				}
 			);
 		interaction.reply({ embeds: [embed1], ephemeral: true });
@@ -336,39 +341,14 @@ client.on(`interactionCreate`, async (interaction) => {
 				ephemeral: true,
 			});
 		} else {
-			var config = JSON.parse(
-				fs.readFileSync(path.resolve(__dirname, "./config.json"))
-			);
 			if (maintenance === true) {
 				interaction.reply({
-					content: `メンテナンスモードをoffにしました。`,
+					content: `管理コンソールから操作してください`,
 				});
-				config.maintenance = false;
-				fs.writeFileSync(
-					path.resolve(__dirname, "./config.json"),
-					JSON.stringify(config, null, "  "),
-					"utf-8"
-				);
-				client.user.setActivity({
-					name: `再起動中・・・`,
-				});
-				await wait(5000);
-				await process.exit();
 			} else {
 				interaction.reply({
-					content: `メンテナンスモードをonにしました。`,
+					content: `管理コンソールから操作してください`,
 				});
-				config.maintenance = true;
-				fs.writeFileSync(
-					path.resolve(__dirname, "./config.json"),
-					JSON.stringify(config, null, "  "),
-					"utf-8"
-				);
-				client.user.setActivity({
-					name: `再起動中・・・`,
-				});
-				await wait(5000);
-				await process.exit();
 			}
 		}
 	}

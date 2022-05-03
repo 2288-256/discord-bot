@@ -12,7 +12,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "name": "discord-bot",
-  "version": "1.9",
+  "version": "1.9.1",
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
