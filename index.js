@@ -209,6 +209,11 @@ client.on(`interactionCreate`, async (interaction) => {
 					name: `最終起動時刻`,
 					value: `\`${d}\``,
 					inline: true,
+				},
+				{
+					name: `メンテナンスモード`,
+					value: `\`${maintenance}\``,
+					inline: true,
 				}
 			);
 		interaction.reply({ embeds: [embed1], ephemeral: true });
